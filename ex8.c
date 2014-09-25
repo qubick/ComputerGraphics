@@ -28,6 +28,7 @@ double zh=0;      //  Rotation of teapot
 int axes=1;       //  Display axes
 int mode=0;       //  What to display
 
+int time=0;
 //  Cosine and Sine in degrees
 #define Cos(x) (cos((x)*3.1415927/180))
 #define Sin(x) (sin((x)*3.1415927/180))
@@ -712,6 +713,7 @@ static void SolidPlane(double x,double y,double z,
 void display()
 {
    const double len=1.5;  //  Length of axes
+   int i = 0;
    //  Erase the window and the depth buffer
    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
    //  Enable Z-buffering in OpenGL
@@ -732,18 +734,32 @@ void display()
          break;
       //  Draw spheres
       case 1:
-         //sphere1(0,0,0 , 0.4);
-         //sphere1(1,0,0 , 0.2);
-         //sphere2(0,1,0 , 0.2);
          taxi(0,0,0 , 0.2,0.2,0.2 , 0);
          taxi(0,0,0 , 0.2,0.2,0.2 , 0);
          taxi(0,0,0 , 0.2,0.2,0.2 , 0);
          break;
-      //  Line airplane
       case 2:
-         PolyPlane(GL_LINE_LOOP , 0,0,0);
-         break;
-      //  Polygon airplane
+	  	//	printf("ph: %f\t th: %f\t zh:%f\n", ph, th, zh);
+		//road
+		glBegin(GL_QUADS);
+		 glColor3f(0.3, 0.3, 0.3);
+		 glVertex3f(-100, -.2,0);
+		 glVertex3f(100, -.2, 0);
+		 glVertex3f(100, -.2, 2);
+		 glVertex3f(-100, .2, 2);
+		
+		glColor3f(1,1,0);
+		for(i=-10; i<10; i++){
+			glVertex3f(i,0, 1);
+			glVertex3f(i+.7,0, 1);
+			glVertex3f(i+.7,0, 1.1);
+			glVertex3f(i,0, 1.1);
+		}
+		glEnd();
+
+		 truck(3,1,1.5 ,.1,.1,.1, 180);
+		 taxi(0,0,.5, .1,.1,.1, 0);
+		 break;
       case 3:
          //  Cube
          truck(-1,0,0 , 0.2,0.2,0.2 , 3*zh);
@@ -751,18 +767,13 @@ void display()
          vaxisphere2(0,0,0 , 0.3);
          
 		 taxi(Cos(zh), Sin(zh), Cos(zh)*Sin(zh), .1,.1,.1,1 );
-		 //  Utah Teapot
-         glPushMatrix();
-         glTranslatef(0,0,-1);
-         glRotatef(zh,0,1,0);
-         glColor3f(Cos(zh)*Cos(zh),0,Sin(zh)*Sin(zh));
-         glutSolidTeapot(0.5);
-         glPopMatrix();
          break;
    }
    //  White
    glColor3f(1,1,1);
    //  Draw axes
+   if (mode != 2)
+   	
    if (axes)
    {
       glBegin(GL_LINES);

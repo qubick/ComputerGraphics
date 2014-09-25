@@ -437,7 +437,8 @@ static void glass(double x, double y, double z, //translate offset
  */
 static void Vertex(double th,double ph)
 {
-   glColor3f(Cos(th)*Cos(th) , Sin(ph)*Sin(ph) , Sin(th)*Sin(th));
+   //glColor3f(Cos(th)*Cos(th) , Sin(ph)*Sin(ph) , Sin(th)*Sin(th));
+   glColor3f(0.5, 1, 0);
    glVertex3d(Sin(th)*Cos(ph) , Sin(ph) , Cos(th)*Cos(ph));
 }
 
@@ -446,16 +447,16 @@ static void Vertex(double th,double ph)
  *     at (x,y,z)
  *     radius (r)
  */
-static void sphere1(double x,double y,double z,double r)
+static void tree(double x,double y,double z,double r)
 {
    const int d=5;
-   int th,ph;
+   int th,ph,i;
 
    //  Save transformation
    glPushMatrix();
    //  Offset and scale
    glTranslated(x,y,z);
-   glScaled(r,r,r);
+   glScaled(r,r*2,r);
 
    //  South pole cap
    glBegin(GL_TRIANGLE_FAN);
@@ -487,6 +488,34 @@ static void sphere1(double x,double y,double z,double r)
    }
    glEnd();
 
+	//trunk
+	glColor3f(1,0.1, 0);
+	glBegin(GL_QUADS);
+	for(i=0; th<4; th++){
+	//front
+		glVertex3f(0,-2,0);
+		glVertex3f(1,-2,0);
+		glVertex3f(1,0,0);
+		glVertex3f(0,0,0);
+	//back
+		glVertex3f(0,-2,-1);
+		glVertex3f(1,-2,-1);
+		glVertex3f(1,0,-1);
+		glVertex3f(0,0,-1);
+
+	//left
+		glVertex3f(0,-2,0);
+		glVertex3f(0,-2,-1);
+		glVertex3f(0,0,-1);
+		glVertex3f(0,0,0);
+
+	//right
+		glVertex3f(1,-2,0);
+		glVertex3f(1,-2,-1);
+		glVertex3f(1,0,-1);
+		glVertex3f(1,0,-1);
+	}
+	glEnd();
    //  Undo transformations
    glPopMatrix();
 }
@@ -737,7 +766,9 @@ void display()
          taxi(0,0,0 , 0.2,0.2,0.2 , 0);
          taxi(0,0,0 , 0.2,0.2,0.2 , 0);
          taxi(0,0,0 , 0.2,0.2,0.2 , 0);
-         break;
+        
+		 tree(0,0,0,1);
+		 break;
       case 2:
 	  	//	printf("ph: %f\t th: %f\t zh:%f\n", ph, th, zh);
 		//road
@@ -749,7 +780,7 @@ void display()
 		 glVertex3f(-100, .2, 2);
 		
 		glColor3f(1,1,0);
-		for(i=-10; i<10; i++){
+		for(i=-10; i<100; i++){
 			glVertex3f(i,0, 1);
 			glVertex3f(i+.7,0, 1);
 			glVertex3f(i+.7,0, 1.1);
@@ -757,7 +788,7 @@ void display()
 		}
 		glEnd();
 
-		 truck(3,1,1.5 ,.1,.1,.1, 180);
+		 truck(3,.1,1.5 ,.1,.1,.1, 180);
 		 taxi(0,0,.5, .1,.1,.1, 0);
 		 break;
       case 3:

@@ -22,11 +22,16 @@
 #include <GL/glut.h>
 #endif
 
-int th=0;         //  Azimuth of view angle
-int ph=0;         //  Elevation of view angle
+int th=35;         //  Azimuth of view angle
+int ph=35;         //  Elevation of view angle
 double zh=0;      //  Rotation of teapot
 int axes=1;       //  Display axes
-int mode=0;       //  What to display
+int view=0;       //  What to display
+int mode=0;
+
+int fov = 55;		//	field of view (for perspective)
+double asp = 1;		//	aspect ratio
+double dim = 5.0;	//	size of world
 
 int time=0;
 //  Cosine and Sine in degrees
@@ -54,6 +59,25 @@ void Print(const char* format , ...)
       glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,*ch++);
 }
 
+void sleep(int time){
+	int i,j = 0;
+
+	for(i=0; i<time; i++){
+		for(j=0; j<time; j++);
+	} 
+}
+
+static void Project(){
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	if(view)
+		gluPerspective(fov, asp, dim/4, 4*dim);
+	else
+		glOrtho(-asp*dim, +asp*dim, -dim,+dim, -dim,+dim);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
 /*
  *  Draw a cube
  *     at (x,y,z)
@@ -402,35 +426,6 @@ static void taxi(double x,double y,double z,
    //  Undo transformations
    glPopMatrix();
 }
-/*
-//draw a wine glass
-static void glass(double x, double y, double z, //translate offset
-				  double dx, double dy, double dz, //scale factor
-				  double th)
-{
-	glPushMatrix();
-	
-	//translate by x,y,z
-	glTranslate(x,y,z);
-	glRotated(th,0,1,0);
-	glScaled(dx, dy. dz);
-
-	glBegin(GL_LINE_LOOP);
-	glColor3f(0,1,0);
-	
-	glVertex3f(2,0,0);
-	glVertex3f(4,1,0);
-	glVertex3f(5,2,0);
-
-	glVertex3f(4,5,0);
-	glVertex3f(0,8,0);
-	glVertex3f(6,8,0);
-	glVertex3f(6,0,0);
-	
-	glEnd();
-	glPopMatrix();
-}
-*/
 
 /*
  *  Draw vertex in polar coordinates
@@ -552,189 +547,6 @@ static vaxisphere2(double x,double y,double z,double r)
    glPopMatrix();
 }
 
-/*
- *  Draw a airplane shaped polygon at (x,y,z)
- */
-static void PolyPlane(int type,double x,double y,double z)
-{
-   //  Save transformation
-   glPushMatrix();
-   //  Offset
-   glTranslated(x,y,z);
-   //  Fuselage and wings
-   glColor3f(1,1,0); 
-   glBegin(type);
-   glVertex2f( 1.0, 0.0);
-   glVertex2f( 0.8, 0.1);
-   glVertex2f( 0.0, 0.1);
-   glVertex2f(-1.0, 0.5);
-   glVertex2f(-1.0,-0.5);
-   glVertex2f( 0.0,-0.1);
-   glVertex2f( 0.8,-0.1);
-   glEnd();
-   //  Vertical tail
-   glColor3f(1,0,0);
-   glBegin(type);
-   glVertex3f(-1.0, 0.0,0.0);
-   glVertex3f(-1.0, 0.0,0.5);
-   glVertex3f(-0.5, 0.0,0.0);
-   glEnd();
-   //  Undo transformations
-   glPopMatrix();
-}
-
-/*
- *  Draw a flat airplane at (x,y,z)
- */
-static void FlatPlane(double x,double y,double z)
-{
-   //  Save transformation
-   glPushMatrix();
-   //  Offset
-   glRotated(-90,1,0,0);
-   glTranslated(x,y,z);
-   //  Fuselage
-   glColor3f(0,0,1);
-   glBegin(GL_POLYGON);
-   glVertex2f( 1.0, 0.0);
-   glVertex2f( 0.8, 0.1);
-   glVertex2f(-1.0, 0.1);
-   glVertex2f(-1.0,-0.1);
-   glVertex2f( 0.8,-0.1);
-   glEnd();
-   //  Wings
-   glColor3f(1,1,0);
-   glBegin(GL_TRIANGLES);
-   //  Starboard
-   glVertex2f( 0.0, 0.1);
-   glVertex2f(-1.0, 0.1);
-   glVertex2f(-1.0, 0.5);
-   //  Port
-   glVertex2f( 0.0,-0.1);
-   glVertex2f(-1.0,-0.1);
-   glVertex2f(-1.0,-0.5);
-   glEnd();
-   //  Vertical tail
-   glColor3f(1,0,0);
-   glBegin(GL_TRIANGLES);
-   glVertex3f(-1.0, 0.0,0.0);
-   glVertex3f(-1.0, 0.0,0.5);
-   glVertex3f(-0.5, 0.0,0.0);
-   glEnd();
-   //  Undo transformations
-   glPopMatrix();
-}
-
-/*
- *  Draw solid airplane
- *    at (x,y,z)
- *    nose towards (dx,dy,dz)
- *    up towards (ux,uy,uz)
- */
-static void SolidPlane(double x,double y,double z,
-                       double dx,double dy,double dz,
-                       double ux,double uy, double uz)
-{
-   // Dimensions used to size airplane
-   const double wid=0.05;
-   const double nose=+0.50;
-   const double cone= 0.20;
-   const double wing= 0.00;
-   const double strk=-0.20;
-   const double tail=-0.50;
-   //  Unit vector in direction of flght
-   double D0 = sqrt(dx*dx+dy*dy+dz*dz);
-   double X0 = dx/D0;
-   double Y0 = dy/D0;
-   double Z0 = dz/D0;
-   //  Unit vector in "up" direction
-   double D1 = sqrt(ux*ux+uy*uy+uz*uz);
-   double X1 = ux/D1;
-   double Y1 = uy/D1;
-   double Z1 = uz/D1;
-   //  Cross product gives the third vector
-   double X2 = Y0*Z1-Y1*Z0;
-   double Y2 = Z0*X1-Z1*X0;
-   double Z2 = X0*Y1-X1*Y0;
-   //  Rotation matrix
-   double mat[16];
-   mat[0] = X0;   mat[4] = X1;   mat[ 8] = X2;   mat[12] = 0;
-   mat[1] = Y0;   mat[5] = Y1;   mat[ 9] = Y2;   mat[13] = 0;
-   mat[2] = Z0;   mat[6] = Z1;   mat[10] = Z2;   mat[14] = 0;
-   mat[3] =  0;   mat[7] =  0;   mat[11] =  0;   mat[15] = 1;
-
-   //  Save current transforms
-   glPushMatrix();
-   //  Offset, scale and rotate
-   glTranslated(x,y,z);
-   glMultMatrixd(mat);
-   //  Nose (4 sided)
-   glColor3f(0,0,1);
-   glBegin(GL_TRIANGLES);
-   glVertex3d(nose, 0.0, 0.0);
-   glVertex3d(cone, wid, wid);
-   glVertex3d(cone,-wid, wid);
-
-   glVertex3d(nose, 0.0, 0.0);
-   glVertex3d(cone, wid,-wid);
-   glVertex3d(cone,-wid,-wid);
-
-   glVertex3d(nose, 0.0, 0.0);
-   glVertex3d(cone, wid, wid);
-   glVertex3d(cone, wid,-wid);
-
-   glVertex3d(nose, 0.0, 0.0);
-   glVertex3d(cone,-wid, wid);
-   glVertex3d(cone,-wid,-wid);
-   glEnd();
-   //  Fuselage (square tube)
-   glBegin(GL_QUADS);
-   glVertex3d(cone, wid, wid);
-   glVertex3d(cone,-wid, wid);
-   glVertex3d(tail,-wid, wid);
-   glVertex3d(tail, wid, wid);
-
-   glVertex3d(cone, wid,-wid);
-   glVertex3d(cone,-wid,-wid);
-   glVertex3d(tail,-wid,-wid);
-   glVertex3d(tail, wid,-wid);
-
-   glVertex3d(cone, wid, wid);
-   glVertex3d(cone, wid,-wid);
-   glVertex3d(tail, wid,-wid);
-   glVertex3d(tail, wid, wid);
-
-   glVertex3d(cone,-wid, wid);
-   glVertex3d(cone,-wid,-wid);
-   glVertex3d(tail,-wid,-wid);
-   glVertex3d(tail,-wid, wid);
-
-   glVertex3d(tail,-wid, wid);
-   glVertex3d(tail, wid, wid);
-   glVertex3d(tail, wid,-wid);
-   glVertex3d(tail,-wid,-wid);
-   glEnd();
-   //  Wings (plane triangles)
-   glColor3f(1,1,0);
-   glBegin(GL_TRIANGLES);
-   glVertex3d(wing, 0.0, wid);
-   glVertex3d(tail, 0.0, wid);
-   glVertex3d(tail, 0.0, 0.5);
-
-   glVertex3d(wing, 0.0,-wid);
-   glVertex3d(tail, 0.0,-wid);
-   glVertex3d(tail, 0.0,-0.5);
-   glEnd();
-   //  Vertical tail (plane triangle)
-   glColor3f(1,0,0);
-   glBegin(GL_POLYGON);
-   glVertex3d(strk, 0.0, 0.0);
-   glVertex3d(tail, 0.3, 0.0);
-   glVertex3d(tail, 0.0, 0.0);
-   glEnd();
-   //  Undo transformations
-   glPopMatrix();
-}
 
 /*
  *  OpenGL (GLUT) calls this routine to display the scene
@@ -749,14 +561,23 @@ void display()
    glEnable(GL_DEPTH_TEST);
    //  Undo previous transformations
    glLoadIdentity();
+
+   if (view){
+   	double Ex = -2*dim*Sin(th)*Cos(ph);
+	double Ey = +2*dim		  *Sin(ph);
+	double Ez = +2*dim*Cos(th)*Cos(ph);
+	gluLookAt(Ex, Ey, Ez, 0,0,0,	0,Cos(ph),0);
+   }
+   else {
    //  Set view angle
-   glRotatef(ph,1,0,0);
-   glRotatef(th,0,1,0);
+   	glRotatef(ph,1,0,0);
+   	glRotatef(th,0,1,0);
+   }
    //  Decide what to draw
    switch (mode)
    {
       //  Draw cubes
-      case 0:
+      case 2:
          truck(0,0,0 , 0.2,0.2,0.2 , 0);
          truck(1,0,2 , 0.1,0.1,0.1 , 30);
          truck(0,1,0 , 0.4,0.3,0.2 , 90);
@@ -769,35 +590,35 @@ void display()
         
 		 tree(0,0,0,1);
 		 break;
-      case 2:
+      case 0:
 	  	//	printf("ph: %f\t th: %f\t zh:%f\n", ph, th, zh);
 		//road
 		glBegin(GL_QUADS);
 		 glColor3f(0.3, 0.3, 0.3);
-		 glVertex3f(-100, -.1, 0);
-		 glVertex3f(100, 	-.1, 0);
-		 glVertex3f(100, 	-.1, 2);
-		 glVertex3f(-100, -.1, 2);
-		
+		 glVertex3f(-100, -.1,-1);
+		 glVertex3f(100, -.1, -1);
+		 glVertex3f(100, -.1, 3);
+		 glVertex3f(-100, -.1, 3);
 		
 		glColor3f(1,1,0);
 		for(i=-10; i<100; i++){
-			glVertex3f(i,		-.1, 1);
-			glVertex3f(i+.7,	-.1, 1);
-			glVertex3f(i+.7,	-.1, 1.1);
-			glVertex3f(i, 	-.1, 1.1);
+			glVertex3f(i,		0, 1);
+			glVertex3f(i+.7,	0, 1);
+			glVertex3f(i+.7,	0, 1.1);
+			glVertex3f(i,		0, 1.1);
 		}
 		glEnd();
 
-		 truck(3,.1,1.5 ,.1,.1,.1, 180);
-		 taxi(0,0,.5, .1,.1,.1, 0);
-		
-		 truck(2,.1,.5 ,.1,.1,.1, 0);
-		 taxi(-4,0,1, .1,.1,.1, 180);
+		 truck((zh-120)*0.1,.1,1.5,	.15,.15,.15, 180);
+		 taxi(-(zh-120)*0.15,0,.5, 		.1,.1,.1, 0);
 
-		 taxi(-2,0,2 ,.1,.1,.1, 0);
-		 //taxi(2,0,.5, .1,.1,.1, 180);
-			 break;
+		 truck(2-(zh-120)*0.1,.1,.1,	.1,.1,.1, 0);
+		 taxi(-5+(zh-100)*0.07,.2,1.5, .1,.1,.1, 180);
+	
+		sleep(10000); 
+		truck(10-(zh-120)*0.15,.1,.5,	.1,.1,.1, 0);
+		// taxi(-2-(zh-120)*0.05,0,1,		.1,.1,.1, 0);
+		 break;
       case 3:
          //  Cube
          truck(-1,0,0 , 0.2,0.2,0.2 , 3*zh);
@@ -810,7 +631,7 @@ void display()
    //  White
    glColor3f(1,1,1);
    //  Draw axes
-   if (mode != 2)
+   if (mode != 0)
    	
    if (axes)
    {
@@ -857,9 +678,17 @@ void special(int key,int x,int y)
    //  Down arrow key - decrease elevation by 5 degrees
    else if (key == GLUT_KEY_DOWN)
       ph -= 5;
+   else if (key == GLUT_KEY_PAGE_DOWN)
+   		dim += 0.1;
+	else if (key == GLUT_KEY_PAGE_DOWN && dim>1)
+		dim -= 0.1;
    //  Keep angles to +/-360 degrees
    th %= 360;
    ph %= 360;
+   
+   //update projection
+   Project();
+
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
 }
@@ -884,12 +713,22 @@ void key(unsigned char ch,int x,int y)
    else if (ch == 'M')
       mode = (mode+6)%4;
    //  Tell GLUT it is necessary to redisplay the scene
+   
+   else if (ch == 'b' || ch == 'B')
+   		view = 1-view;
+	else if(ch == '-' && ch>1)
+		fov--;
+	else if(ch == '+' && ch<179)
+		fov++;
+	
+	//reproject
+	Project();
    glutPostRedisplay();
 }
 
 /*
  *  GLUT calls this routine when the window is resized
- */
+ 
 void reshape(int width,int height)
 {
    const double dim=2.5;
@@ -908,7 +747,14 @@ void reshape(int width,int height)
    //  Undo previous transformations
    glLoadIdentity();
 }
+*/
+void reshape(int width, int height)
+{
+	asp = (height>0) ? (double)width/height :1;
+	glViewport(0,0, width, height);
 
+	Project();
+}
 /*
  *  GLUT calls this toutine when there is nothing else to do
  */
@@ -930,7 +776,7 @@ int main(int argc,char* argv[])
    glutInitWindowSize(600,600);
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    //  Create the window
-   glutCreateWindow("Objects");
+   glutCreateWindow("HW4-JeeeunKim");
    //  Tell GLUT to call "idle" when there is nothing else to do
    glutIdleFunc(idle);
    //  Tell GLUT to call "display" when the scene should be drawn

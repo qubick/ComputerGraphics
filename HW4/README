@@ -1,0 +1,14 @@
+HW4: 3D Animation
+
+Jeeeun Kim
+CSCI4229/5229 Fall 2014
+
+Demonstrates how to draw a street view in 3D.
+
+Key bindings
+  m/M        Cycle through different sets of objects
+  b/B	     Toggle Projection View from/to Orthogornal
+  a          Toggle axes
+  arrows     Change view angle
+  0          Reset view angle
+  ESC        Exit

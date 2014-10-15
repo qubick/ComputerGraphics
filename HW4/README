@@ -11,4 +11,5 @@ Key bindings
   a          Toggle axes
   arrows     Change view angle
   0          Reset view angle
+  PageUP	 Zoom in
   ESC        Exit

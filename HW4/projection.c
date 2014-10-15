@@ -22,6 +22,7 @@
 #include <GL/glut.h>
 #endif
 
+#define offset 0.001
 int th=35;         //  Azimuth of view angle
 int ph=35;         //  Elevation of view angle
 double zh=0;      //  Rotation of teapot
@@ -38,6 +39,7 @@ int time=0;
 #define Cos(x) (cos((x)*3.1415927/180))
 #define Sin(x) (sin((x)*3.1415927/180))
 
+#define SCALE_FACTOR	0.8
 #define PI 3.141592653589792384
 #define RADIUS 1
 /*
@@ -427,126 +429,6 @@ static void taxi(double x,double y,double z,
    glPopMatrix();
 }
 
-/*
- *  Draw vertex in polar coordinates
- */
-static void Vertex(double th,double ph)
-{
-   //glColor3f(Cos(th)*Cos(th) , Sin(ph)*Sin(ph) , Sin(th)*Sin(th));
-   glColor3f(0.5, 1, 0);
-   glVertex3d(Sin(th)*Cos(ph) , Sin(ph) , Cos(th)*Cos(ph));
-}
-
-/*
- *  Draw a sphere (version 1)
- *     at (x,y,z)
- *     radius (r)
- */
-static void tree(double x,double y,double z,double r)
-{
-   const int d=5;
-   int th,ph,i;
-
-   //  Save transformation
-   glPushMatrix();
-   //  Offset and scale
-   glTranslated(x,y,z);
-   glScaled(r,r*2,r);
-
-   //  South pole cap
-   glBegin(GL_TRIANGLE_FAN);
-   Vertex(0,-90);
-   for (th=0;th<=360;th+=d)
-   {
-      Vertex(th,d-90);
-   }
-   glEnd();
-
-   //  Latitude bands
-   for (ph=d-90;ph<=90-2*d;ph+=d)
-   {
-      glBegin(GL_QUAD_STRIP);
-      for (th=0;th<=360;th+=d)
-      {
-         Vertex(th,ph);
-         Vertex(th,ph+d);
-      }
-      glEnd();
-   }
-
-   //  North pole cap
-   glBegin(GL_TRIANGLE_FAN);
-   Vertex(0,90);
-   for (th=0;th<=360;th+=d)
-   {
-      Vertex(th,90-d);
-   }
-   glEnd();
-
-	//trunk
-	glColor3f(1,0.1, 0);
-	glBegin(GL_QUADS);
-	for(i=0; th<4; th++){
-	//front
-		glVertex3f(0,-2,0);
-		glVertex3f(1,-2,0);
-		glVertex3f(1,0,0);
-		glVertex3f(0,0,0);
-	//back
-		glVertex3f(0,-2,-1);
-		glVertex3f(1,-2,-1);
-		glVertex3f(1,0,-1);
-		glVertex3f(0,0,-1);
-
-	//left
-		glVertex3f(0,-2,0);
-		glVertex3f(0,-2,-1);
-		glVertex3f(0,0,-1);
-		glVertex3f(0,0,0);
-
-	//right
-		glVertex3f(1,-2,0);
-		glVertex3f(1,-2,-1);
-		glVertex3f(1,0,-1);
-		glVertex3f(1,0,-1);
-	}
-	glEnd();
-   //  Undo transformations
-   glPopMatrix();
-}
-
-/*
- *  Draw a sphere (version 2)
- *     at (x,y,z)
- *     radius (r)
- */
-static vaxisphere2(double x,double y,double z,double r)
-{
-   const int d=5;
-   int th,ph;
-
-   //  Save transformation
-   glPushMatrix();
-   //  Offset and scale
-   glTranslated(x,y,z);
-   glScaled(r,r,r);
-
-   //  Latitude bands
-   for (ph=-90;ph<90;ph+=d)
-   {
-      glBegin(GL_QUAD_STRIP);
-      for (th=0;th<=360;th+=d)
-      {
-         Vertex(th,ph);
-         Vertex(th,ph+d);
-      }
-      glEnd();
-   }
-
-   //  Undo transformations
-   glPopMatrix();
-}
-
 
 /*
  *  OpenGL (GLUT) calls this routine to display the scene
@@ -588,7 +470,7 @@ void display()
          taxi(0,0,0 , 0.2,0.2,0.2 , 0);
          taxi(0,0,0 , 0.2,0.2,0.2 , 0);
         
-		 tree(0,0,0,1);
+		 //tree(0,0,0,1);
 		 break;
       case 0:
 	  	//	printf("ph: %f\t th: %f\t zh:%f\n", ph, th, zh);
@@ -599,13 +481,14 @@ void display()
 		 glVertex3f(100, -.1, -1);
 		 glVertex3f(100, -.1, 3);
 		 glVertex3f(-100, -.1, 3);
-		
+
+		//stripes
 		glColor3f(1,1,0);
 		for(i=-10; i<100; i++){
-			glVertex3f(i,		0, 1);
-			glVertex3f(i+.7,	0, 1);
-			glVertex3f(i+.7,	0, 1.1);
-			glVertex3f(i,		0, 1.1);
+			glVertex3f(i,		-.1+offset, 1);
+			glVertex3f(i+.7,	-.1+offset, 1);
+			glVertex3f(i+.7,	-.1+offset, 1.1);
+			glVertex3f(i,		-.1+offset, 1.1);
 		}
 		glEnd();
 
@@ -623,7 +506,7 @@ void display()
          //  Cube
          truck(-1,0,0 , 0.2,0.2,0.2 , 3*zh);
          //  Ball
-         vaxisphere2(0,0,0 , 0.3);
+         //vaxisphere2(0,0,0 , 0.3);
          
 		 taxi(Cos(zh), Sin(zh), Cos(zh)*Sin(zh), .1,.1,.1,1 );
          break;
@@ -678,12 +561,17 @@ void special(int key,int x,int y)
    //  Down arrow key - decrease elevation by 5 degrees
    else if (key == GLUT_KEY_DOWN)
       ph -= 5;
-   else if (key == GLUT_KEY_PAGE_DOWN)
+   else if (key == GLUT_KEY_PAGE_UP)
    		dim += 0.1;
 	else if (key == GLUT_KEY_PAGE_DOWN && dim>1)
 		dim -= 0.1;
    //  Keep angles to +/-360 degrees
-   th %= 360;
+
+	if(key == GLUT_KEY_F1)
+		glScaled(1.0/SCALE_FACTOR, 1.0/SCALE_FACTOR, 1.0/SCALE_FACTOR);
+	if(key == GLUT_KEY_F2)
+		glScaled(SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR);
+	th %= 360;
    ph %= 360;
    
    //update projection
@@ -773,7 +661,7 @@ int main(int argc,char* argv[])
    //  Initialize GLUT and process user parameters
    glutInit(&argc,argv);
    //  Request double buffered, true color window with Z buffering at 600x600
-   glutInitWindowSize(600,600);
+   glutInitWindowSize(800,600);
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    //  Create the window
    glutCreateWindow("HW4-JeeeunKim");

@@ -1,4 +1,4 @@
-EX=ex8 projection
+EX=projection
 all: $(EX)
 
 # Main target

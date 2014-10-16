@@ -71,6 +71,7 @@ static void street()
 	//asphalt
 	glBegin(GL_QUADS);
    	glColor3f(0.3, 0.3, 0.3);
+		glNormal3f(0,1,0);
    	glVertex3f(-100, -.1,-1);
 		glVertex3f(100, -.1, -1);
 		glVertex3f(100, -.1, 3);
@@ -79,6 +80,7 @@ static void street()
       //stripes
       glColor3f(1,1,0);
 			for(i=-10; i<100; i++){
+				glNormal3f(0,1,0);
 				glVertex3f(i,           -.1+offset, 1);
 				glVertex3f(i+.7,        -.1+offset, 1);
 				glVertex3f(i+.7,        -.1+offset, 1.1);
@@ -110,6 +112,8 @@ static void taxi(double x,double y,double z,
 	//  Front
 	glBegin(GL_POLYGON);
 		glColor3f(1,0,0); //red
+		glNormal3f(0,0,1);
+		
 		glVertex3f(0,0, 0);
 		glVertex3f(10,0, 0);
 		glVertex3f(10,1, 0);
@@ -123,6 +127,8 @@ static void taxi(double x,double y,double z,
 	// back
 	glBegin(GL_POLYGON);
 		glColor3f(1,0,-4); //red
+		glNormal3f(0,0,1);
+		
 		glVertex3f(0,0, -4);
 		glVertex3f(10,0, -4);
 		glVertex3f(10,1, -4);
@@ -134,16 +140,17 @@ static void taxi(double x,double y,double z,
 	glEnd();
 	
 	glBegin(GL_QUADS);
-
-	// right_bottom
-	glColor3f(0,0,1); //blue
-	glVertex3f(10,0,0);
-	glVertex3f(10,0,-4);
-	glVertex3f(10,1,-4);
-	glVertex3f(10,1,0);
+		// right_bottom
+		glColor3f(0,0,1); //blue
+		glNormal3f(0,-1,0);
+		glVertex3f(10,0,0);
+		glVertex3f(10,0,-4);
+		glVertex3f(10,1,-4);
+		glVertex3f(10,1,0);
 	
 	//right_window
 	glColor3f(0,1,1); //cyan
+//		glNormal3f();
 	glVertex3f(9,1,0);
 	glVertex3f(9,1,-4);
 	glVertex3f(8,3,-4);
@@ -151,6 +158,7 @@ static void taxi(double x,double y,double z,
 	
 	// left_bottom
 	glColor3f(0,1,0);//green
+		glNormal3f(-1,0,0);
 	glVertex3f(0, 0, 0);
 	glVertex3f(0,0,-4);
 	glVertex3f(0,1,-4);
@@ -158,6 +166,7 @@ static void taxi(double x,double y,double z,
 
 	//  left_window
 	glColor3f(1,1,0); //yellow
+//		glNormal3f();
 	glVertex3f(1.5,1,0);
 	glVertex3f(1.5,1,-4);
 	glVertex3f(4,3,-4);
@@ -165,25 +174,31 @@ static void taxi(double x,double y,double z,
 	
 	//  top
 	glColor3f(1,1,1);
+		glNormal3f(0,1,0);
 	glVertex3f(4,3,0);
 	glVertex3f(4,3,-4);
 	glVertex3f(8,3,-4);
 	glVertex3f(8,3,0);
-	
+
+	//bonnet cover
 	glColor3f(.5, .2, .2);
+		glNormal3f(0,1,0);
 	glVertex3f(0,1,0);
 	glVertex3f(0,1,-4);
 	glVertex3f(2,1,-4);
 	glVertex3f(2,1,0);
-	
+
+	//trunk cover
 	glColor3f(.3, .3, .2);
+		glNormal3f(0,1,0);
 	glVertex3f(9,1,0);
 	glVertex3f(9,1,-4);
 	glVertex3f(10,1,-4);
 	glVertex3f(10,1,0);
-	
+
 	//  bottom
 	glColor3f(1,1,1);
+		glNormal3f(0,-1,0);
 	glVertex3f(0,0,0);
 	glVertex3f(0,0,-4);
 	glVertex3f(10,0,-4);
@@ -193,13 +208,15 @@ static void taxi(double x,double y,double z,
 	
 	//front
 	glColor3f(.1, .7, .7);
+		glNormal3f(0,0,1);
 	glVertex3f(5,3,-1);
 	glVertex3f(6,3,-1);
 	glVertex3f(6,4,-1);
 	glVertex3f(5,4,-1);
-	
+
 	//back
 	glColor3f(.1, .7, .7);
+		glNormal3f(0,0,-1);
 	glVertex3f(5,3,-3);
 	glVertex3f(6,3,-3);
 	glVertex3f(6,4,-3);
@@ -207,6 +224,7 @@ static void taxi(double x,double y,double z,
 
 	//left
 	glColor3f(.1, .4, .3);
+		glNormal3f(-1,0,0);
 	glVertex3f(5,3,-1);
 	glVertex3f(5,4,-1);
 	glVertex3f(5,4,-3);
@@ -214,6 +232,7 @@ static void taxi(double x,double y,double z,
 
 	//right
 	glColor3f(.1, .4, .3);
+		glNormal3f(1,0,0);
 	glVertex3f(6,3,-1);
 	glVertex3f(6,4,-1);
 	glVertex3f(6,4,-3);
@@ -221,6 +240,7 @@ static void taxi(double x,double y,double z,
 
 	//top
 	glColor3f(.9, .2, .2);
+		glNormal3f(0,1,0);
 	glVertex3f(5,4,-1);
 	glVertex3f(6,4,-1);
 	glVertex3f(6,4,-3);
@@ -231,11 +251,13 @@ static void taxi(double x,double y,double z,
 	glColor3f(.2, .3, .5);
 	
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,1);
 		for(i = 0; i<2 * PI; i+= PI/4)
 			glVertex3f(cos(i)*RADIUS+3, sin(i)*RADIUS, -.5);
 	glEnd();
 
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,1);
 		for(i = 0; i<2 * PI; i+= PI/6)
 			glVertex3f(cos(i)*RADIUS+8, sin(i)*RADIUS, -.5);
 	glEnd();
@@ -243,11 +265,13 @@ static void taxi(double x,double y,double z,
 	//*************** Tire back *******************//
 																	
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,-1);
 		for(i = 0; i<2 * PI; i+= PI/6)
 			glVertex3f(cos(i)*RADIUS+3, sin(i)*RADIUS, -3.5);
 	glEnd();
 	
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,-1);
 		for(i = 0; i<2 * PI; i+= PI/6)
 			glVertex3f(cos(i)*RADIUS+8, sin(i)*RADIUS, -3.5);
 			
@@ -280,6 +304,7 @@ static void truck(double x,double y,double z,
 	//  Front
 	glBegin(GL_POLYGON);
 		glColor3f(1,0,0); //red
+		glNormal3f(0,0,1);
 		glVertex3f(0,0, 0);
 		glVertex3f(10,0, 0);
 		glVertex3f(10,4, 0);
@@ -291,6 +316,7 @@ static void truck(double x,double y,double z,
 	//back
 	glBegin(GL_POLYGON);
 	   glColor3f(0,1,0); //green
+		glNormal3f(0,0,-1);
 	   glVertex3f(0,0, -4);
 		glVertex3f(10,0, -4);
 		glVertex3f(10,4, -4);
@@ -303,27 +329,31 @@ static void truck(double x,double y,double z,
 
    // right
       glColor3f(0,0,1); //blue
+		glNormal3f(1,0,0);
       glVertex3f(10,0,0);
 		glVertex3f(10,0,-4);
 		glVertex3f(10,4,-4);
 		glVertex3f(10,4,0);
 
-   // left_bottom
+   // bonnet-front
     	glColor3f(0,1,0);//green
+		glNormal3f(-1,0,0);
 		glVertex3f(0, 0, 0);
 		glVertex3f(0,0,-4);
 		glVertex3f(0,1,-4);
 		glVertex3f(0,1,0);
 
- 	 //  left_bonnet
+ 	 //  bonnet-cover
 	   glColor3f(1,1,0); //yellow
+		glNormal3f(0,1,0);
 	   glVertex3f(0,1,0);
 	   glVertex3f(0,1,-4);
 	   glVertex3f(2,2,-4);
 		glVertex3f(2,2,0);
 
-	//  left_window
+	//  left winder
 		glColor3f(0,1,1); //cyan
+//		glNormal3f();
 		glVertex3f(2,2,0);
 		glVertex3f(2,2,-4);
 		glVertex3f(4,4,-4);
@@ -331,6 +361,7 @@ static void truck(double x,double y,double z,
 								
 	//  top
 		glColor3f(1,1,1);
+		glNormal3f(0,1,0);
 		glVertex3f(4,4,0);
 		glVertex3f(4,4,-4);
 		glVertex3f(10,4,-4);
@@ -338,6 +369,7 @@ static void truck(double x,double y,double z,
 
 	//  bottom
    	glColor3f(1,1,1);
+		glNormal3f(0,-1,0);
       glVertex3f(0,0,0);
 	   glVertex3f(0,0,-4);
 		glVertex3f(10,0,-4);
@@ -349,32 +381,37 @@ static void truck(double x,double y,double z,
 	glColor3f(.2, .3, .5);
 	glBegin(GL_POLYGON);
 		
+		glNormal3f(0,0,1);
 		for(i = 0; i<2 * PI; i+= PI/4)
 			glVertex3f(cos(i)*RADIUS+3, sin(i)*RADIUS, -.5);
 
 	glEnd();
 
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,1);
 		for(i = 0; i<2 * PI; i+= PI/6)
 			glVertex3f(cos(i)*RADIUS+8, sin(i)*RADIUS, -.5);
 	glEnd();
 	
 	//*************** Tire back ********************//
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,-1);
 		for(i = 0; i<2 * PI; i+= PI/6)
 			glVertex3f(cos(i)*RADIUS+3, sin(i)*RADIUS, -3.5);
 	glEnd();
 	
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,-1);
 		for(i = 0; i<2 * PI; i+= PI/6)
 			glVertex3f(cos(i)*RADIUS+8, sin(i)*RADIUS, -3.5);
 	glEnd();
 	
-	//********* Side mirro Right********//
+	//********* Side mirror Right********//
 	glBegin(GL_QUADS);
 	
 	//mirror-front
 		glColor3f(1,1,1);
+		glNormal3f(0,0,1);
 		glVertex3f(5,2,.5);
 		glVertex3f(5.3,2,.5);
 		glVertex3f(5.3,3,.5);
@@ -382,6 +419,7 @@ static void truck(double x,double y,double z,
 	
 	// mirror-left
 		glColor3f(1,0,1);
+		glNormal3f(-1,0,0);
 		glVertex3f(5,2,0);
 		glVertex3f(5,2,.5);
 		glVertex3f(5,3,.5);
@@ -389,6 +427,7 @@ static void truck(double x,double y,double z,
 		
 	// mirror-right
 		glColor3f(1,0,1);
+		glNormal3f(1,0,0);
 		glVertex3f(5.3,2,0);
 		glVertex3f(5.3,2,.5);
 		glVertex3f(5.3,3,.5);
@@ -396,6 +435,7 @@ static void truck(double x,double y,double z,
 
 	// mirror-top
 		glColor3f(1,0,1);
+		glNormal3f(0,1,0);
 		glVertex3f(5,2,0);
 		glVertex3f(5,2,.5);
 		glVertex3f(5.3,2,.5);
@@ -403,28 +443,26 @@ static void truck(double x,double y,double z,
 		
 	// mirror-top
 		glColor3f(0,1,0);
+		glNormal3f(0,-1,0);
 		glVertex3f(5,3,0);
 		glVertex3f(5,3,.5);
 		glVertex3f(5.3,3,.5);
 		glVertex3f(5.3,3,0);											
 		
-/********* Side mirro Right********/							
+		
+/********* Side mirror left********/							
 
 	//mirror-front
 		glColor3f(1,1,1);
+		glNormal3f(0,0,-1);
 		glVertex3f(5,2,-4.5);
 		glVertex3f(5.3,2,-4.5);
 		glVertex3f(5.3,3,-4.5);
 		glVertex3f(5,3,-4.5);
 	
 	// mirror-left
-		glColor3f(1,0,1);
-		glVertex3f(5,2,-4);
-		glVertex3f(5,2,-4.5);
-		glVertex3f(5,3,-4.5);
-
-	// mirror-left
       glColor3f(1,0,1);
+		glNormal3f(-1,0,0);
 		glVertex3f(5,2,-4);
 		glVertex3f(5,2,-4.5);
 		glVertex3f(5,3,-4.5);
@@ -432,6 +470,7 @@ static void truck(double x,double y,double z,
 
 	// mirror-right
 		glColor3f(1,0,1);
+		glNormal3f(1,0,0);
 		glVertex3f(5.3,2,-4);
 		glVertex3f(5.3,2,-4.5);
 		glVertex3f(5.3,3,-4.5);
@@ -439,6 +478,7 @@ static void truck(double x,double y,double z,
 	
 	// mirror-bottom
 		glColor3f(0,1,1);
+		glNormal3f(0,-1,0);
 		glVertex3f(5,2,-4);
 		glVertex3f(5,2,-4.5);
 		glVertex3f(5.3,2,-4.5);
@@ -446,6 +486,7 @@ static void truck(double x,double y,double z,
 									
 	// mirror-top
 		glColor3f(0,1,1);
+		glNormal3f(0,1,0);
 		glVertex3f(5,3,-4);
 		glVertex3f(5,3,-4.5);
 		glVertex3f(5.3,3,-4.5);

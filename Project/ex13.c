@@ -71,6 +71,7 @@ static void street()
 	//asphalt
 	glBegin(GL_QUADS);
    	glColor3f(0.3, 0.3, 0.3);
+		glNormal3f(0,1,0);
    	glVertex3f(-100, -.1,-1);
 		glVertex3f(100, -.1, -1);
 		glVertex3f(100, -.1, 3);
@@ -91,7 +92,6 @@ static void box(double x,double y,double z,
                  double dx,double dy,double dz,
 					  double th)
 {
-	double i = 0.0;
 
    float yellow[] = {1.0,1.0,0.0,1.0};
    float Emission[]  = {0.0,0.0,0.01*emission,1.0};
@@ -155,8 +155,33 @@ static void box(double x,double y,double z,
 		glVertex3f(40,28,0);
 		glVertex3f(40,2,0);
 	glEnd();
-	
-	//******************** right ****************//
+
+	//bottom bar
+	glBegin(GL_POLYGON);
+		glVertex3f(40,0,-5);
+		glVertex3f(40,0,-25);
+		glVertex3f(40,10,-25);
+		glVertex3f(40,10,-5);
+	glEnd();
+
+	//top bar
+	glBegin(GL_POLYGON);
+		glVertex3f(40,25,-5);
+		glVertex3f(40,25,-25);
+		glVertex3f(40,30,-25);
+		glVertex3f(40,30,-5);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+		glVertex3f(40,0,-25);
+		glVertex3f(40,0,-28);
+		glVertex3f(40,2,-30);
+		glVertex3f(40,28,-30);
+		glVertex3f(40,30,-28);
+		glVertex3f(40,30,-25);
+	glEnd();
+
+	//******************** right wall ****************//
 	glBegin(GL_POLYGON);
 		glVertex3f(0,0,-2);
 		glVertex3f(0,0,-5);
@@ -165,22 +190,53 @@ static void box(double x,double y,double z,
 		glVertex3f(0,28,0);
 		glVertex3f(0,2,0);
 	glEnd();
+	
+	//bottom bar
+	glBegin(GL_POLYGON);
+		glVertex3f(0,0,-5);
+		glVertex3f(0,0,-25);
+		glVertex3f(0,10,-25);
+		glVertex3f(0,10,-5);
+	glEnd();
+	
+	//top bar
+	glBegin(GL_POLYGON);
+		glVertex3f(0,25,-5);
+		glVertex3f(0,25,-25);
+		glVertex3f(0,30,-25);
+		glVertex3f(0,30,-5);
+	glEnd();
+	
+	glBegin(GL_POLYGON);
+		glVertex3f(0,0,-25);
+		glVertex3f(0,0,-28);
+		glVertex3f(0,2,-30);
+		glVertex3f(0,28,-30);
+		glVertex3f(0,30,-28);
+		glVertex3f(0,30,-25);
+	glEnd();
+
+
+	//********************* back ***********************//
+	glBegin(GL_POLYGON);
+		glVertex3f(2,0,-30);
+		glVertex3f(38,0,-30);
+		glVertex3f(40,2,-30);
+		glVertex3f(40,28,-30);
+		glVertex3f(38,30,-30);
+		glVertex3f(2,30,-30);
+		glVertex3f(0,28,-30);
+	glEnd();
 	//  Undo transformations
 	glPopMatrix();
 }
 
 
-static void truck(double x,double y,double z,
+static void plate(double x,double y,double z,
                  double dx,double dy,double dz,
 				     double th)
 {
-	double i = 0.0;
 
-   float white[] = {1,1,1,1};
-   float black[] = {0,0,0,1};
-   glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,shinyvec);
-   glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,white);
-   glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,black);
 	//  Save transformation
 	glPushMatrix();
 	//  Offset
@@ -188,182 +244,48 @@ static void truck(double x,double y,double z,
 	glRotated(th,0,1,0);
 	glScaled(dx,dy,dz);
 
-	glVertex3f(0,0, 0);
-	//***********************  Front *************************//
+	glColor3f(1,1,1); //red
+	
+	//****************  vertical logo bar ******************//
 	glBegin(GL_POLYGON);
-		glColor3f(1,0,0); //red
-		glVertex3f(10,0, 0);
-		glVertex3f(10,4, 0);
-		glVertex3f(4,4,0);
-		glVertex3f(2,2,0);
-		glVertex3f(0,1,0);
+		glVertex3f(2,0,0);
+		glVertex3f(4,0,0);
+		glVertex3f(5,1,0);
+		glVertex3f(15,1,0);
+		glVertex3f(16,0,0);
+		glVertex3f(18,0,0);
+		glVertex3f(18,10,0);
+		glVertex3f(16,10,0);
+		glVertex3f(15,9,0);
+		glVertex3f(5,9,0);
+		glVertex3f(4,10,0);
+		glVertex3f(2,10,0);
 	glEnd();
-
-	//back
-	glBegin(GL_POLYGON);
-	   glVertex3f(5,0,0);
-	   glVertex3f(20,0,0);
-	   glVertex3f(30,0,0);
-	   glVertex3f(35,0,0);
-	   glVertex3f(35,10,0);
-	   glVertex3f(30,10,0);
-	   glVertex3f(20,5,0);
-	   glVertex3f(5,5,0);
-	glEnd();
-
+	
+	//left cylinder stand
 	glBegin(GL_QUADS);
-
-   // right
-      glColor3f(0,0,1); //blue
-      glVertex3f(10,0,0);
-		glVertex3f(10,0,-4);
-		glVertex3f(10,4,-4);
-		glVertex3f(10,4,0);
-
-   // left_bottom
-    	glColor3f(0,1,0);//green
-		glVertex3f(0, 0, 0);
-		glVertex3f(0,0,-4);
-		glVertex3f(0,1,-4);
-		glVertex3f(0,1,0);
-
- 	 //  left_bonnet
-	   glColor3f(1,1,0); //yellow
-	   glVertex3f(0,1,0);
-	   glVertex3f(0,1,-4);
-	   glVertex3f(2,2,-4);
-		glVertex3f(2,2,0);
-
-	//  left_window
-		glColor3f(0,1,1); //cyan
-		glVertex3f(2,2,0);
-		glVertex3f(2,2,-4);
-		glVertex3f(4,4,-4);
-		glVertex3f(4,4,0);
-								
-	//  top
-		glColor3f(1,1,1);
-		glVertex3f(4,4,0);
-		glVertex3f(4,4,-4);
-		glVertex3f(10,4,-4);
-		glVertex3f(10,4,0);
-
-	//  bottom
-   	glColor3f(1,1,1);
-      glVertex3f(0,0,0);
-	   glVertex3f(0,0,-4);
-		glVertex3f(10,0,-4);
-		glVertex3f(10,0,0);
-
-	glEnd();
-	//*************** Tire front *******************//
-	
-	glColor3f(.2, .3, .5);
-	glBegin(GL_POLYGON);
-		
-		for(i = 0; i<2 * PI; i+= PI/4)
-			glVertex3f(cos(i)*RADIUS+3, sin(i)*RADIUS, -.5);
-
+		glVertex3f(0,0,.5);
+		glVertex3f(2,0,.5);
+		glVertex3f(2,10,.5);
+		glVertex3f(0,10,.5);
+	//right cylinder stand	
+		glVertex3f(18,0,.5);
+		glVertex3f(20,0,.5);
+		glVertex3f(20,10,.5);
+		glVertex3f(18,10,.5);
 	glEnd();
 
-	glBegin(GL_POLYGON);
-		for(i = 0; i<2 * PI; i+= PI/6)
-			glVertex3f(cos(i)*RADIUS+8, sin(i)*RADIUS, -.5);
-	glEnd();
-	
-	//*************** Tire back ********************//
-	glBegin(GL_POLYGON);
-		for(i = 0; i<2 * PI; i+= PI/6)
-			glVertex3f(cos(i)*RADIUS+3, sin(i)*RADIUS, -3.5);
-	glEnd();
-	
-	glBegin(GL_POLYGON);
-		for(i = 0; i<2 * PI; i+= PI/6)
-			glVertex3f(cos(i)*RADIUS+8, sin(i)*RADIUS, -3.5);
-	glEnd();
-	
-	//********* Side mirro Right********//
+	//**************** printing plate *********************//
 	glBegin(GL_QUADS);
-	
-	//mirror-front
-		glColor3f(1,1,1);
-		glVertex3f(5,2,.5);
-		glVertex3f(5.3,2,.5);
-		glVertex3f(5.3,3,.5);
-		glVertex3f(5,3,.5);
-	
-	// mirror-left
-		glColor3f(1,0,1);
-		glVertex3f(5,2,0);
-		glVertex3f(5,2,.5);
-		glVertex3f(5,3,.5);
-		glVertex3f(5,3,0);
+		glVertex3f(2,0,25);
+		glVertex3f(18,0,25);
+		glVertex3f(18,1,25);
+		glVertex3f(2,1,25);
 		
-	// mirror-right
-		glColor3f(1,0,1);
-		glVertex3f(5.3,2,0);
-		glVertex3f(5.3,2,.5);
-		glVertex3f(5.3,3,.5);
-		glVertex3f(5.3,3,0);
-
-	// mirror-top
-		glColor3f(1,0,1);
-		glVertex3f(5,2,0);
-		glVertex3f(5,2,.5);
-		glVertex3f(5.3,2,.5);
-		glVertex3f(5.3,2,0);
-		
-	// mirror-top
-		glColor3f(0,1,0);
-		glVertex3f(5,3,0);
-		glVertex3f(5,3,.5);
-		glVertex3f(5.3,3,.5);
-		glVertex3f(5.3,3,0);											
-		
-/********* Side mirro Right********/							
-
-	//mirror-front
-		glColor3f(1,1,1);
-		glVertex3f(5,2,-4.5);
-		glVertex3f(5.3,2,-4.5);
-		glVertex3f(5.3,3,-4.5);
-		glVertex3f(5,3,-4.5);
-	
-	// mirror-left
-		glColor3f(1,0,1);
-		glVertex3f(5,2,-4);
-		glVertex3f(5,2,-4.5);
-		glVertex3f(5,3,-4.5);
-
-	// mirror-left
-      glColor3f(1,0,1);
-		glVertex3f(5,2,-4);
-		glVertex3f(5,2,-4.5);
-		glVertex3f(5,3,-4.5);
-		glVertex3f(5,3,-4);
-
-	// mirror-right
-		glColor3f(1,0,1);
-		glVertex3f(5.3,2,-4);
-		glVertex3f(5.3,2,-4.5);
-		glVertex3f(5.3,3,-4.5);
-		glVertex3f(5.3,3,-4);
-	
-	// mirror-bottom
-		glColor3f(0,1,1);
-		glVertex3f(5,2,-4);
-		glVertex3f(5,2,-4.5);
-		glVertex3f(5.3,2,-4.5);
-		glVertex3f(5.3,2,-4);
-									
-	// mirror-top
-		glColor3f(0,1,1);
-		glVertex3f(5,3,-4);
-		glVertex3f(5,3,-4.5);
-		glVertex3f(5.3,3,-4.5);
-		glVertex3f(5.3,3,-4);
-	
-	//  End
+		glVertex3f(2,1,25);
+		glVertex3f(18,1,25);
+		glVertex3f(18,3,23);
+		glVertex3f(2,3,23);
 	glEnd();
 	//  Undo transformation
 	glPopMatrix();
@@ -483,17 +405,14 @@ void display()
    else
      glDisable(GL_LIGHTING);
 
-   //  Draw scene
-   //cube(+1,0,0 , 0.5,0.5,0.5 , 0);
-  // ball(-1,0,-2 , 0.5);
 
-	street();
+//	street();
 //   truck(-5+(zh-12)*0.1,.1,1.5,	.15,.15,.15, 180);
 //	truck(2-(zh-120)*0.1,.1,.1,    .1,.1,.1, 0);
 	
 //	taxi(-5+(zh-100)*0.07,.2,1.5, .1,.1,.1, 180);
 	box(0,0,0,              .2,.2,.2, 0);
-	
+	plate(-5,0,0,				.2,.2,.2, 0);	
 //	sleep(10000);
 //	truck(10-(zh-120)*0.15,.1,.5,   .1,.1,.1, 0);
 

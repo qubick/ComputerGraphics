@@ -150,7 +150,7 @@ static void taxi(double x,double y,double z,
 	
 	//right_window
 	glColor3f(0,1,1); //cyan
-//		glNormal3f();
+		glNormal3f(0.6,0.8,0);
 	glVertex3f(9,1,0);
 	glVertex3f(9,1,-4);
 	glVertex3f(8,3,-4);
@@ -166,7 +166,7 @@ static void taxi(double x,double y,double z,
 
 	//  left_window
 	glColor3f(1,1,0); //yellow
-//		glNormal3f();
+		glNormal3f(-0.6,0.8,0);
 	glVertex3f(1.5,1,0);
 	glVertex3f(1.5,1,-4);
 	glVertex3f(4,3,-4);
@@ -351,9 +351,9 @@ static void truck(double x,double y,double z,
 	   glVertex3f(2,2,-4);
 		glVertex3f(2,2,0);
 
-	//  left winder
+	//  left window
 		glColor3f(0,1,1); //cyan
-//		glNormal3f();
+		glNormal3f(-0.3, 0.7, 0);
 		glVertex3f(2,2,0);
 		glVertex3f(2,2,-4);
 		glVertex3f(4,4,-4);

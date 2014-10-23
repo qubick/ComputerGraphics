@@ -311,16 +311,18 @@ static void truck(double x,double y,double z,
 	//  Front
 	glBegin(GL_POLYGON);
 		glColor3f(1,0,0); //red
-		glNormal3f(0,0,1);
+//		glNormal3f(0,0,1);
 		
 		glTexCoord2f(0.0, 0.0); glVertex3f(0,0, 0);
-		glTexCoord2f(rep, 0.0); glVertex3f(10,0, 0);
+		glTexCoord2f(0.0, rep); glVertex3f(10,0, 0);
 		glTexCoord2f(rep, rep); glVertex3f(10,4, 0);
-		glTexCoord2f(0.0, rep); glVertex3f(4,4,0);
-		glTexCoord2f(rep, rep); glVertex3f(2,2,0);
-		glTexCoord2f(rep, 0.0); glVertex3f(0,1,0);
+		//glTexCoord2f(rep, 0.0); i
+glVertex3f(4,4,0);
+		//glTexCoord2f(rep, rep); 
+glVertex3f(2,2,0);
+		glTexCoord2f(rep, 0.0); 
+glVertex3f(0,1,0);
 	glEnd();
-glDisable(GL_TEXTURE_2D);
 
 	//back
 	glBegin(GL_POLYGON);
@@ -337,11 +339,17 @@ glDisable(GL_TEXTURE_2D);
 	glBegin(GL_QUADS);
 
    // right
+	glBindTexture(GL_TEXTURE_2D, texture[ntex]);
       glColor3f(0,0,1); //blue
 		glNormal3f(1,0,0);
+		
+		glTexCoord2f(0.0, 0.0); 
       glVertex3f(10,0,0);
+		glTexCoord2f(rep, 0.0); 
 		glVertex3f(10,0,-4);
+		glTexCoord2f(rep, rep); 
 		glVertex3f(10,4,-4);
+		glTexCoord2f(0.0, rep); 
 		glVertex3f(10,4,0);
 
    // bonnet-front
@@ -371,9 +379,13 @@ glDisable(GL_TEXTURE_2D);
 	//  top
 		glColor3f(1,1,1);
 		glNormal3f(0,1,0);
+		glTexCoord2f(0.0, 0.0); 
 		glVertex3f(4,4,0);
+		glTexCoord2f(rep, 0.0); 
 		glVertex3f(4,4,-4);
+		glTexCoord2f(rep, rep); 
 		glVertex3f(10,4,-4);
+		glTexCoord2f(0.0, rep); 
 		glVertex3f(10,4,0);
 
 	//  bottom
@@ -385,6 +397,7 @@ glDisable(GL_TEXTURE_2D);
 		glVertex3f(10,0,0);
 
 	glEnd();
+glDisable(GL_TEXTURE_2D);
 	//*************** Tire front *******************//
 	
 	glColor3f(.2, .3, .5);
@@ -630,14 +643,14 @@ void display()
   // ball(-1,0,-2 , 0.5);
 
 	street();
-   	truck(-5+(zh-12)*0.1,.1,1.5,	.15,.15,.15, 180);
-	truck(2-(zh-120)*0.1,.1,.1,    .1,.1,.1, 0);
+   	truck(-5+(zh-12)*0.05,.1,1.5,	.15,.15,.15, 180);
+	truck(2-(zh-120)*0.05,.1,.1,    .1,.1,.1, 0);
 	
-	taxi(-5+(zh-100)*0.07,.2,1.5, .1,.1,.1, 180);
-	taxi(-(zh-120)*0.15,0,.5,              .1,.1,.1, 0);
+	taxi(-5+(zh-100)*0.06,.2,1.5, .1,.1,.1, 180);
+	taxi(-(zh-120)*0.08,0,.5,              .1,.1,.1, 0);
 	
 	sleep(10000);
-	truck(10-(zh-120)*0.15,.1,.5,   .1,.1,.1, 0);
+	truck(10-(zh-120)*0.08,.1,.5,   .1,.1,.1, 0);
 
    //  Render the scene and make it visible
    ErrCheck("display");
@@ -726,9 +739,11 @@ void key(unsigned char ch,int x,int y)
       zh -= 1;
    //  Change field of view angle
    else if (ch == '-' && ch>1)
-      fov--;
+      //fov--;
+		rep -= 0.1;
    else if (ch == '+' && ch<179)
-      fov++;
+      //fov++;
+		rep += 0.1;
    //  Light elevation
    else if (ch=='[')
       ylight -= 0.1;
@@ -801,7 +816,7 @@ int main(int argc,char* argv[])
    glutIdleFunc(idle);
 
 	texture[0] = LoadTexBMP("block.bmp");
-	texture[1] = LoadTexBMP("block.bmp");
+//	texture[1] = LoadTexBMP("metal.bmp");
 	texture[2] = LoadTexBMP("block.bmp");
    //  Pass control to GLUT so it can interact with the user
    ErrCheck("init");

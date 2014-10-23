@@ -1,0 +1,24 @@
+Homework5: Lighting
+
+Jeeeun Kim
+CSCI 5229 Fall 2014
+
+Demonstrates basic lighting upon object (street, truck, and taxi).
+
+Key bindings
+  l          Toggles lighting
+  a/A        Decrease/increase ambient light
+  b/B	     Toggle light source rotation axe - horizontal/vertical
+  d/D        Decrease/increase diffuse light
+  s/S        Decrease/increase specular light
+  e/E        Decrease/increase emitted light
+  n/N        Decrease/increase shininess
+  F3         Increase light distance gradually from 1 to 5
+  m          Toggles light movement
+  []         Lower/rise light
+  p          Toggles ortogonal/perspective projection
+  +/-        Change field of view of perspective
+  arrows     Change view angle
+  PgDn/PgUp  Zoom in and out
+  0          Reset view angle
+  ESC        Exit

@@ -37,8 +37,8 @@ int view = 0;
 int time=0;
 int ball_mode = 0;
 
-int ntex=0;			// texture
-double rep=1;		// repetition
+int ntex=1;			// texture
+double rep=0.2;		// repetition
 unsigned int texture[3];
 
 #define SCALE_FACTOR	0.8
@@ -81,18 +81,27 @@ static void street()
 		glVertex3f(100, -.1, 3);
 		glVertex3f(-100, -.1, 3);
 
+		glEnable(GL_TEXTURE_2D);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glBindTexture(GL_TEXTURE_2D, texture[ntex]);
       //stripes
       glColor3f(1,1,0);
 			for(i=-10; i<100; i++){
 				glNormal3f(0,1,0);
+		glTexCoord2f(rep, rep); 
 				glVertex3f(i,           -.1+offset, 1);
+		glTexCoord2f(rep, rep); 
 				glVertex3f(i+.7,        -.1+offset, 1);
+		glTexCoord2f(rep, rep); 
 				glVertex3f(i+.7,        -.1+offset, 1.1);
+		glTexCoord2f(rep, rep); 
 				glVertex3f(i,           -.1+offset, 1.1);
          }
 		glEnd();
+		glDisable(GL_TEXTURE_2D);
 
 }
+#if 0
 static void taxi(double x,double y,double z,
                  double dx,double dy,double dz,
 					  double th)
@@ -285,7 +294,7 @@ static void taxi(double x,double y,double z,
 	//  Undo transformations
 	glPopMatrix();
 }
-
+#endif
 
 static void truck(double x,double y,double z,
                  double dx,double dy,double dz,
@@ -310,58 +319,53 @@ static void truck(double x,double y,double z,
 	glBindTexture(GL_TEXTURE_2D, texture[ntex]);
 	//  Front
 	glBegin(GL_POLYGON);
-		glColor3f(1,0,0); //red
-//		glNormal3f(0,0,1);
-		
+		glColor3f(0,1,0); //red
+		glNormal3f(0,0,1);
+	
 		glTexCoord2f(0.0, 0.0); glVertex3f(0,0, 0);
 		glTexCoord2f(0.0, rep); glVertex3f(10,0, 0);
 		glTexCoord2f(rep, rep); glVertex3f(10,4, 0);
-		//glTexCoord2f(rep, 0.0); i
-glVertex3f(4,4,0);
-		//glTexCoord2f(rep, rep); 
-glVertex3f(2,2,0);
-		glTexCoord2f(rep, 0.0); 
-glVertex3f(0,1,0);
+		glVertex3f(4,4,0);
+		glVertex3f(2,2,0);
+		glTexCoord2f(rep, 0.0); glVertex3f(0,1,0);
 	glEnd();
 
 	//back
 	glBegin(GL_POLYGON);
-	   glColor3f(0,1,0); //green
+	   glColor3f(0, 1, 0); 
 		glNormal3f(0,0,-1);
-	   glVertex3f(0,0, -4);
-		glVertex3f(10,0, -4);
-		glVertex3f(10,4, -4);
+
+	   	glTexCoord2f(0.0, 0.0); glVertex3f(0,0, -4);
+		glTexCoord2f(0.0, rep); glVertex3f(10,0, -4);
+		glTexCoord2f(rep, rep); glVertex3f(10,4, -4);
 		glVertex3f(4,4,-4);
 		glVertex3f(2,2,-4);
-		glVertex3f(0,1,-4);
+		glTexCoord2f(rep, 0.0); glVertex3f(0,1,-4);
 	glEnd();
 
 	glBegin(GL_QUADS);
 
    // right
 	glBindTexture(GL_TEXTURE_2D, texture[ntex]);
-      glColor3f(0,0,1); //blue
+      glColor3f(0,0.8,0); 
 		glNormal3f(1,0,0);
 		
-		glTexCoord2f(0.0, 0.0); 
-      glVertex3f(10,0,0);
-		glTexCoord2f(rep, 0.0); 
-		glVertex3f(10,0,-4);
-		glTexCoord2f(rep, rep); 
-		glVertex3f(10,4,-4);
-		glTexCoord2f(0.0, rep); 
-		glVertex3f(10,4,0);
+		glTexCoord2f(0.0, 0.0); glVertex3f(10,0,0);
+		glTexCoord2f(rep, 0.0); glVertex3f(10,0,-4);
+		glTexCoord2f(rep, rep); glVertex3f(10,4,-4);
+		glTexCoord2f(0.0, rep); glVertex3f(10,4,0);
 
    // bonnet-front
-    	glColor3f(0,1,0);//green
+    	glColor3f(0,0.6,0);
 		glNormal3f(-1,0,0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0,0,-4);
-		glVertex3f(0,1,-4);
-		glVertex3f(0,1,0);
+
+		glTexCoord2f(0.0, 0.0); glVertex3f(0, 0, 0);
+		glTexCoord2f(rep, 0.0); glVertex3f(0,0,-4);
+		glTexCoord2f(rep, rep); glVertex3f(0,1,-4);
+		glTexCoord2f(0.0, rep); glVertex3f(0,1,0);
 
  	 //  bonnet-cover
-	   glColor3f(1,1,0); //yellow
+	   glColor3f(0,0.4,0);
 		glNormal3f(0,1,0);
 	   glVertex3f(0,1,0);
 	   glVertex3f(0,1,-4);
@@ -377,16 +381,12 @@ glVertex3f(0,1,0);
 		glVertex3f(4,4,0);
 								
 	//  top
-		glColor3f(1,1,1);
+		glColor3f(0,0.8,0);
 		glNormal3f(0,1,0);
-		glTexCoord2f(0.0, 0.0); 
-		glVertex3f(4,4,0);
-		glTexCoord2f(rep, 0.0); 
-		glVertex3f(4,4,-4);
-		glTexCoord2f(rep, rep); 
-		glVertex3f(10,4,-4);
-		glTexCoord2f(0.0, rep); 
-		glVertex3f(10,4,0);
+		glTexCoord2f(0.0, 0.0); glVertex3f(4,4,0);
+		glTexCoord2f(rep, 0.0); glVertex3f(4,4,-4);
+		glTexCoord2f(rep, rep); glVertex3f(10,4,-4);
+		glTexCoord2f(0.0, rep); glVertex3f(10,4,0);
 
 	//  bottom
    	glColor3f(1,1,1);
@@ -516,6 +516,7 @@ glDisable(GL_TEXTURE_2D);
 	
 	//  End
 	glEnd();
+glDisable(GL_TEXTURE_2D);
 	//  Undo transformation
 	glPopMatrix();
 }
@@ -584,8 +585,6 @@ void display()
    //  Perspective - set eye position
    
 	//setup texture environment
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mode?GL_REPLACE:GL_MODULATE);
-	glBindTexture(GL_TEXTURE_2D, texture[ntex]);
 	if (mode)
    {
       double Ex = -2*dim*Sin(th)*Cos(ph);
@@ -638,22 +637,19 @@ void display()
    else
      glDisable(GL_LIGHTING);
 
-   //  Draw scene
-   //cube(+1,0,0 , 0.5,0.5,0.5 , 0);
-  // ball(-1,0,-2 , 0.5);
 
 	street();
    	truck(-5+(zh-12)*0.05,.1,1.5,	.15,.15,.15, 180);
 	truck(2-(zh-120)*0.05,.1,.1,    .1,.1,.1, 0);
 	
-	taxi(-5+(zh-100)*0.06,.2,1.5, .1,.1,.1, 180);
-	taxi(-(zh-120)*0.08,0,.5,              .1,.1,.1, 0);
+	truck(-5+(zh-100)*0.06,.2,1.5, .1,.1,.1, 180);
+	truck(-(zh-120)*0.08,0,.5,              .2,.2,.2, 0);
 	
 	sleep(10000);
 	truck(10-(zh-120)*0.08,.1,.5,   .1,.1,.1, 0);
 
    //  Render the scene and make it visible
-   ErrCheck("display");
+//   ErrCheck("display");
    glFlush();
    glutSwapBuffers();
 }
@@ -666,7 +662,9 @@ void idle()
    //  Elapsed time in seconds
    double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
    zh = fmod(90*t,360.0);
-   //  Tell GLUT it is necessary to redisplay the scene
+   
+rep += 0.1;
+	//  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
 }
 
@@ -816,7 +814,7 @@ int main(int argc,char* argv[])
    glutIdleFunc(idle);
 
 	texture[0] = LoadTexBMP("block.bmp");
-//	texture[1] = LoadTexBMP("metal.bmp");
+	texture[1] = LoadTexBMP("water.bmp");
 	texture[2] = LoadTexBMP("block.bmp");
    //  Pass control to GLUT so it can interact with the user
    ErrCheck("init");

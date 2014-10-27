@@ -63,33 +63,86 @@ void sleep(int time){
 		for(j=0; j<time; j++);
 	}
 }
-static void street()
+
+void setup(){
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+static void spool(double x, double y, double z,
+						double dx, double dy, double dz,
+						double th)
 {
-	//      printf("ph: %f\t th: %f\t zh:%f\n", ph, th, zh);
-   int i=0;
 
-	//asphalt
+   float yellow[] = {1.0,1.0,0.0,1.0};
+   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
+	
+	int i = 0;
+
+	glPushMatrix();
+	glTranslated(x,y,z);
+	glRotated(th,0,1,0);
+	glScaled(dx, dy, dz);
+
+	glColor3f(1,0,0); //red spool
+
+   glColor3f(1,1,1);
+   glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
+   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
+   glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
+
+	glBegin(GL_POLYGON);
+	for(i=-10; i<100; i++){
+		glVertex3f(i,-.1, 10);
+	}
+	glEnd();
+	glPopMatrix();
+}
+
+static void header(double x,double y,double z,
+                 double dx,double dy, double dz,
+					  double th)
+{
+   float yellow[] = {1.0,1.0,0.0,1.0};
+   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
+	
+	//  Save transformation
+	glPushMatrix();
+	//  Offset
+	glTranslated(x,y,z);
+	glRotated(th,0,1,0);
+	glScaled(dx,dy,dz);
+
+   glColor3f(1,1,1);
+   glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
+   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
+   glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
+
 	glBegin(GL_QUADS);
-   	glColor3f(0.3, 0.3, 0.3);
-		glNormal3f(0,1,0);
-   	glVertex3f(-100, -.1,-1);
-		glVertex3f(100, -.1, -1);
-		glVertex3f(100, -.1, 3);
-		glVertex3f(-100, -.1, 3);
-
-      //stripes
-      glColor3f(1,1,0);
-			for(i=-10; i<100; i++){
-				glVertex3f(i,           -.1+offset, 1);
-				glVertex3f(i+.7,        -.1+offset, 1);
-				glVertex3f(i+.7,        -.1+offset, 1.1);
-				glVertex3f(i,           -.1+offset, 1.1);
-         }
-		glEnd();
-
+		//front
+		glVertex3f(0,0,0);
+		glVertex3f(5,0,0);
+		glVertex3f(5,3,0);
+		glVertex3f(0,3,0);
+		//left
+		glVertex3f(0,0,0);
+		glVertex3f(0,0,-5);
+		glVertex3f(0,3,-5);
+		glVertex3f(0,3,0);
+		//right
+		glVertex3f(5,0,0);
+		glVertex3f(5,0,-5);
+		glVertex3f(5,3,-5);
+		glVertex3f(5,3,0);
+		//back
+		glVertex3f(0,0,-5);
+		glVertex3f(5,0,-5);
+		glVertex3f(5,3,-5);
+		glVertex3f(0,3,-5);
+	glEnd();
+	glPopMatrix();
 }
 static void box(double x,double y,double z,
-                 double dx,double dy,double dz,
+                 double dx,double dy, double dz,
 					  double th)
 {
 
@@ -219,6 +272,7 @@ static void box(double x,double y,double z,
 
 	//********************* back ***********************//
 	glBegin(GL_POLYGON);
+		glVertex3f(0,2,-30);
 		glVertex3f(2,0,-30);
 		glVertex3f(38,0,-30);
 		glVertex3f(40,2,-30);
@@ -247,6 +301,7 @@ static void plate(double x,double y,double z,
 	glColor3f(1,1,1); //red
 	
 	//****************  vertical logo bar ******************//
+		//front
 	glBegin(GL_POLYGON);
 		glVertex3f(2,0,0);
 		glVertex3f(4,0,0);
@@ -262,21 +317,70 @@ static void plate(double x,double y,double z,
 		glVertex3f(2,10,0);
 	glEnd();
 	
+	glBegin(GL_POLYGON);
+		glVertex3f(2,0,1);
+		glVertex3f(4,0,1);
+		glVertex3f(5,1,1);
+		glVertex3f(15,1,1);
+		glVertex3f(16,0,1);
+		glVertex3f(18,0,1);
+		glVertex3f(18,10,1);
+		glVertex3f(16,10,1);
+		glVertex3f(15,9,1);
+		glVertex3f(5,9,1);
+		glVertex3f(4,10,1);
+		glVertex3f(2,10,1);
+	glEnd();
+	
 	//left cylinder stand
 	glBegin(GL_QUADS);
-		glVertex3f(0,0,.5);
-		glVertex3f(2,0,.5);
-		glVertex3f(2,10,.5);
-		glVertex3f(0,10,.5);
+		//front
+		glVertex3f(0,0,1.5);
+		glVertex3f(2,0,1.5);
+		glVertex3f(2,10,1.5);
+		glVertex3f(0,10,1.5);
+		//left
+		glVertex3f(0,0,1.5);
+		glVertex3f(0,0,-.5);
+		glVertex3f(0,10,-.5);
+		glVertex3f(0,10,1.5);
+		//right
+		glVertex3f(2,0,1.5);
+		glVertex3f(2,0,-.5);
+		glVertex3f(2,10,-.5);
+		glVertex3f(2,10,1.5);
+		//back
+		glVertex3f(0,0,-.5);
+		glVertex3f(2,0,-.5);
+		glVertex3f(2,10,-.5);
+		glVertex3f(0,10,-.5);
+	
 	//right cylinder stand	
-		glVertex3f(18,0,.5);
-		glVertex3f(20,0,.5);
-		glVertex3f(20,10,.5);
-		glVertex3f(18,10,.5);
+		//front
+		glVertex3f(18,0,1.5);
+		glVertex3f(20,0,1.5);
+		glVertex3f(20,10,1.5);
+		glVertex3f(18,10,1.5);
+		//left
+		glVertex3f(18,0,1.5);
+		glVertex3f(18,0,-.5);
+		glVertex3f(18,10,-.5);
+		glVertex3f(18,10,1.5);
+		//right
+		glVertex3f(20,0,1.5);
+		glVertex3f(20,0,-.5);
+		glVertex3f(20,10,-.5);
+		glVertex3f(20,10,1.5);
+		//back
+		glVertex3f(18,0,-.5);
+		glVertex3f(20,0,-.5);
+		glVertex3f(20,10,-.5);
+		glVertex3f(18,10,-.5);
 	glEnd();
 
 	//**************** printing plate *********************//
 	glBegin(GL_QUADS);
+		//front
 		glVertex3f(2,0,25);
 		glVertex3f(18,0,25);
 		glVertex3f(18,1,25);
@@ -284,8 +388,55 @@ static void plate(double x,double y,double z,
 		
 		glVertex3f(2,1,25);
 		glVertex3f(18,1,25);
-		glVertex3f(18,3,23);
-		glVertex3f(2,3,23);
+		glVertex3f(18,2,23);
+		glVertex3f(2,2,23);
+	
+		glVertex3f(2,0,23);
+		glVertex3f(18,0,23);
+		glVertex3f(18,2,23);
+		glVertex3f(2,2,23);
+		
+		//plate bridge-left
+		glVertex3f(0,-1,0);
+		glVertex3f(0,-1,25);
+		glVertex3f(2,-1,25);
+		glVertex3f(2,-1,0);
+
+		glVertex3f(0,1,0);
+		glVertex3f(0,1,25);
+		glVertex3f(2,1,25);
+		glVertex3f(2,1,0);
+		
+		glVertex3f(0,-1,0);
+		glVertex3f(0,-1,25);
+		glVertex3f(0,1,25);
+		glVertex3f(0,1,0);
+		
+		glVertex3f(2,-1,0);
+		glVertex3f(2,-1,25);
+		glVertex3f(2,1,25);
+		glVertex3f(2,1,0);
+
+		//plate bridge-right
+		glVertex3f(18,-1,0);
+		glVertex3f(18,-1,25);
+		glVertex3f(20,-1,25);
+		glVertex3f(20,-1,0);
+		
+		glVertex3f(18,1,0);
+		glVertex3f(18,1,25);
+		glVertex3f(20,1,25);
+		glVertex3f(20,1,0);
+		
+		glVertex3f(18,-1,0);
+		glVertex3f(18,-1,25);
+		glVertex3f(18,1,25);
+		glVertex3f(18,1,0);
+		
+		glVertex3f(20,-1,0);
+		glVertex3f(20,-1,25);
+		glVertex3f(20,1,25);
+		glVertex3f(20,1,0);
 	glEnd();
 	//  Undo transformation
 	glPopMatrix();
@@ -347,7 +498,12 @@ void display()
 {
    //  Erase the window and the depth buffer
    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-   //  Enable Z-buffering in OpenGL
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	//glRectf(-0.75f, 0.75f, 0.75f, -0.75f);
+	//glutSwapBuffers();
+	
+	//  Enable Z-buffering in OpenGL
    glEnable(GL_DEPTH_TEST);
 
    //  Undo previous transformations
@@ -406,18 +562,13 @@ void display()
      glDisable(GL_LIGHTING);
 
 
-//	street();
-//   truck(-5+(zh-12)*0.1,.1,1.5,	.15,.15,.15, 180);
-//	truck(2-(zh-120)*0.1,.1,.1,    .1,.1,.1, 0);
-	
-//	taxi(-5+(zh-100)*0.07,.2,1.5, .1,.1,.1, 180);
 	box(0,0,0,              .2,.2,.2, 0);
 	plate(-5,0,0,				.2,.2,.2, 0);	
-//	sleep(10000);
-//	truck(10-(zh-120)*0.15,.1,.5,   .1,.1,.1, 0);
+  
+  spool(0,0,0,		1,1,1, 0);
 
-   //  Render the scene and make it visible
-   ErrCheck("display");
+	header(0,0,5, .2,.2,.2, 0);
+	ErrCheck("display");
    glFlush();
    glutSwapBuffers();
 }
@@ -568,7 +719,9 @@ int main(int argc,char* argv[])
    glutInit(&argc,argv);
    //  Request double buffered, true color window with Z buffering at 600x600
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-   glutInitWindowSize(900,600);
+   glClearColor(1,1,1,1);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glutInitWindowSize(900,900);
    glutCreateWindow("HW5_JeeeunKim_Lighting");
    //  Set callbacks
    glutDisplayFunc(display);

@@ -36,8 +36,9 @@ unsigned int LoadTexBMP(const char* file)
    f = fopen(file,"rb");
    if (!f) Fatal("Cannot open file %s\n",file);
    //  Check image magic
-   if (fread(&magic,2,1,f)!=1) Fatal("Cannot read magic from %s\n",file);
-   if (magic!=0x4D42 && magic!=0x424D) Fatal("Image magic not BMP in %s\n",file);
+   if (fread(&magic,2,1,f)!=1) 
+	Fatal("Cannot read magic from %s\n",file);
+  // if (magic!=0x4D42 && magic!=0x424D) Fatal("Image magic not BMP in %s\n",file);
    //  Seek to and read header
    if (fseek(f,16,SEEK_CUR) || fread(&dx ,4,1,f)!=1 || fread(&dy ,4,1,f)!=1 ||
        fread(&nbp,2,1,f)!=1 || fread(&bpp,2,1,f)!=1 || fread(&k,4,1,f)!=1)

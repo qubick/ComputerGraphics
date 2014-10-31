@@ -73,9 +73,6 @@ static void spool(double x, double y, double z,
 						double th)
 {
 
-   float yellow[] = {1.0,1.0,0.0,1.0};
-   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
-	
 	int i = 0;
 
 	glPushMatrix();
@@ -86,9 +83,6 @@ static void spool(double x, double y, double z,
 	glColor3f(1,0,0); //red spool
 
    glColor3f(1,1,1);
-   glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
-   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
-   glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
 
 	glBegin(GL_POLYGON);
 	for(i=-10; i<100; i++){

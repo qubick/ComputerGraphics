@@ -84,6 +84,71 @@ static void spool(double x, double y, double z,
 
 	glPopMatrix();
 }
+
+static void printBase(double x, double y, double z,
+						double dx, double dy, double dz,
+						double th)
+{
+
+   float yellow[] = {1.0,1.0,0.0,1.0};
+   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
+	
+	//  Save transformation
+	glPushMatrix();
+	//  Offset
+	glTranslated(x,y,z);
+	glRotated(th,0,1,0);
+	glScaled(dx,dy,dz);
+
+   //glColor3f(1,1,0); //yellow
+   glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
+   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
+   glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
+
+	glBegin(GL_QUADS);
+	glColor3f(0,0,1);
+	//************************ table top **************//
+		//top
+		glNormal3f(0,1,0);
+		glVertex3f(0,0,0);
+		glVertex3f(10,0,0);
+		glVertex3f(10,0,7);
+		glVertex3f(0,0,7);
+		//bottom
+		glNormal3f(0,-1,0);
+		glVertex3f(0,-1,0);
+		glVertex3f(10,-1,0);
+		glVertex3f(10,-1,7);
+		glVertex3f(0,-1,7);
+		//back
+		glNormal3f(0,0,-1);
+		glVertex3f(0,0,0);
+		glVertex3f(0,-1,0);
+		glVertex3f(10,-1,0);
+		glVertex3f(10,0,0);
+		//front
+		glNormal3f(0,0,1);
+		glVertex3f(0,0,7);
+		glVertex3f(0,-1,7);
+		glVertex3f(10,-1,7);
+		glVertex3f(10,0,7);
+		//left
+		glNormal3f(-1,0,0);
+		glVertex3f(0,0,0);
+		glVertex3f(0,-1,0);
+		glVertex3f(0,-1,7);
+		glVertex3f(0,0,7);
+		//right
+		glNormal3f(1,0,0);
+		glVertex3f(10,0,0);
+		glVertex3f(10,-1,0);
+		glVertex3f(10,-1,7);
+		glVertex3f(10,0,7);
+	glEnd();
+	glPopMatrix();
+
+}
+
 static void desk(double x, double y, double z,
 						double dx, double dy, double dz,
 						double th)
@@ -99,7 +164,7 @@ static void desk(double x, double y, double z,
 	glRotated(th,0,1,0);
 	glScaled(dx,dy,dz);
 
-   glColor3f(1,1,0); //yellow
+   //glColor3f(1,1,0); //yellow
    glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
    glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
    glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
@@ -187,6 +252,11 @@ static void header(double x,double y,double z,
 		glVertex3f(5,0,-5);
 		glVertex3f(5,3,-5);
 		glVertex3f(0,3,-5);
+		//bottom
+		glVertex3f(0,0,0);
+		glVertex3f(5,0,0);
+		glVertex3f(5,0,-5);
+		glVertex3f(0,0,-5);
 	glEnd();
 	glPopMatrix();
 }
@@ -360,8 +430,10 @@ static void plate(double x,double y,double z,
 	glRotated(th,0,1,0);
 	glScaled(dx,dy,dz);
 
-	glColor3f(1,1,1); //red
+	//glColor3f(0,0,1);
+	printBase(-7,2.5,1.5, 3.5,1.5,3, 0);
 	
+	glColor3f(1,1,1);
 	//****************  vertical logo bar ******************//
 	//front
 	glBegin(GL_POLYGON);
@@ -503,12 +575,11 @@ static void plate(double x,double y,double z,
 		glVertex3f(2,1,25);
 		glVertex3f(2,1,0);
 		//front
-		glColor3f(1,0,0);
 		glNormal3f(0,0,1);
-		glVertex3f(0,-1,0);
-		glVertex3f(0,-1,2);
-		glVertex3f(2,1,2);
-		glVertex3f(2,1,0);
+		glVertex3f(0,-1,25);
+		glVertex3f(0,1,25);
+		glVertex3f(2,1,25);
+		glVertex3f(2,-1,25);
 		//plate slot
 		//front
 		glNormal3f(0,0,1);
@@ -540,8 +611,13 @@ static void plate(double x,double y,double z,
 		glVertex3f(20,-1,0);
 		glVertex3f(20,-1,25);
 		glVertex3f(20,1,25);
-		glVertex3f(20,1,0);
-		
+		glVertex3f(20,1,0);	
+		//front
+		glNormal3f(0,0,1);
+		glVertex3f(18,-1,25);
+		glVertex3f(18,1,25);
+		glVertex3f(20,1,25);
+		glVertex3f(20,-1,25);
 		//plate slot
 		//front
 		glNormal3f(0,0,1);
@@ -552,6 +628,7 @@ static void plate(double x,double y,double z,
 	glEnd();
 	//  Undo transformation
 	glPopMatrix();
+
 }
 
 /*
@@ -675,7 +752,7 @@ void display()
 
 	desk(-7,-1,-5,	2,1,2, 0);
 	box(-3,0,3,              .2,.2,.2, 0);
-	plate(-7,0,0,				.2,.2,.2, 0);	
+	plate(-1,1,-2.5,				.2,.2,.2, 0);	
   
   spool(3,4,-4.5,		1,1,1, 0);
 

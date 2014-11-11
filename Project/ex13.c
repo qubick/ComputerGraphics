@@ -14,6 +14,8 @@ int view = 0;
 int time=0;
 int ball_mode = 0;
 
+double baseHeight = 0;
+
 #define SCALE_FACTOR	0.8
 #define PI	3.141592653589792384
 #define RADIUS	1
@@ -84,7 +86,34 @@ static void spool(double x, double y, double z,
 
 	glPopMatrix();
 }
+/*
+static void printBase(double x, double y, double z,
+						double dx, double dy, double dz,
+						double th)
+{
 
+   float yellow[] = {1.0,1.0,0.0,1.0};
+   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
+	
+	//  Save transformation
+	glPushMatrix();
+	//  Offset
+	glTranslated(x,y,z);
+	glRotated(th,0,1,0);
+	glScaled(dx,dy,dz);
+
+   glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
+   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
+   glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
+
+	glBegin(GL_QUADS);
+	glColor3f(0,0,1);
+
+		glVertex3f();
+		glVertex3f();
+		glVertex3f();
+}
+*/
 static void printBase(double x, double y, double z,
 						double dx, double dy, double dz,
 						double th)
@@ -233,26 +262,32 @@ static void header(double x,double y,double z,
 
 	glBegin(GL_QUADS);
 		//front
+		glNormal3f(0,0,1);
 		glVertex3f(0,0,0);
 		glVertex3f(5,0,0);
 		glVertex3f(5,3,0);
 		glVertex3f(0,3,0);
 		//left
+		glNormal3f(-1,0,0);
 		glVertex3f(0,0,0);
 		glVertex3f(0,0,-5);
 		glVertex3f(0,3,-5);
 		glVertex3f(0,3,0);
 		//right
+		glNormal3f(1,0,0);
 		glVertex3f(5,0,0);
 		glVertex3f(5,0,-5);
 		glVertex3f(5,3,-5);
 		glVertex3f(5,3,0);
 		//back
+		glNormal3f(0,0,-1);
 		glVertex3f(0,0,-5);
 		glVertex3f(5,0,-5);
 		glVertex3f(5,3,-5);
 		glVertex3f(0,3,-5);
 		//bottom
+		glColor3f(1,0,0);
+		glNormal3f(0,-1,0);
 		glVertex3f(0,0,0);
 		glVertex3f(5,0,0);
 		glVertex3f(5,0,-5);
@@ -752,11 +787,12 @@ void display()
 
 	desk(-7,-1,-5,	2,1,2, 0);
 	box(-3,0,3,              .2,.2,.2, 0);
-	plate(-1,1,-2.5,				.2,.2,.2, 0);	
+	
+	plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
   
   spool(3,4,-4.5,		1,1,1, 0);
 
-	header(0,0,5, .2,.2,.2, 0);
+	header(baseHeight*3-3,5,0, .2,.2,.2, 0);
 	ErrCheck("display");
    glFlush();
    glutSwapBuffers();
@@ -769,9 +805,12 @@ void idle()
 {
    //  Elapsed time in seconds
    double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
-   zh = fmod(90*t,360.0);
+
+	zh = fmod(90*t,360.0);
    //  Tell GLUT it is necessary to redisplay the scene
-   glutPostRedisplay();
+		baseHeight = sin(t)+1;
+
+	glutPostRedisplay();
 }
 
 /*

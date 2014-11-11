@@ -72,6 +72,16 @@ static void spool(double x, double y, double z,
 		glVertex3f(cos(i)*RADIUS*1.5, sin(i)*RADIUS*1.2, 1);
 	}
 	glEnd();
+
+
+	/****************** cylinder how? ************
+	glBegin(GL_POLYGON);
+	for(i=0; i<2*PI; i+=PI/12){
+		glVertex3f(cos(i)*RADIUS, sin(i)*RADIUS, 0);
+	}
+	glEnd();
+	*********************************************/
+
 	glPopMatrix();
 }
 
@@ -140,6 +150,7 @@ static void box(double x,double y,double z,
 	
 	//******************** front ****************//
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,1);
 		glVertex3f(2,0, 0);
 		glVertex3f(5,0, 0);
 		glVertex3f(5,30, 0);
@@ -149,6 +160,7 @@ static void box(double x,double y,double z,
 	glEnd();
 	
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,1);
 		glVertex3f(5,0,0);
 		glVertex3f(20,0,0);
 		glVertex3f(25,0,0);
@@ -160,6 +172,7 @@ static void box(double x,double y,double z,
 	glEnd();
 	
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,1);
 		glVertex3f(35,0,0);
 		glVertex3f(38,0,0);
 		glVertex3f(40,2,0);
@@ -169,6 +182,7 @@ static void box(double x,double y,double z,
 	glEnd();
 
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,1);
 		glVertex3f(5,25,0);
 		glVertex3f(35,25,0);
 		glVertex3f(35,30,0);
@@ -178,6 +192,7 @@ static void box(double x,double y,double z,
 
 	//******************** left ****************//
 	glBegin(GL_POLYGON);
+		glNormal3f(-1,0,0);
 		glVertex3f(40,0,-2);
 		glVertex3f(40,0,-5);
 		glVertex3f(40,30,-5);
@@ -188,6 +203,7 @@ static void box(double x,double y,double z,
 
 	//bottom bar
 	glBegin(GL_POLYGON);
+		glNormal3f(-1,0,0);
 		glVertex3f(40,0,-5);
 		glVertex3f(40,0,-25);
 		glVertex3f(40,10,-25);
@@ -196,6 +212,7 @@ static void box(double x,double y,double z,
 
 	//top bar
 	glBegin(GL_POLYGON);
+		glNormal3f(-1,0,0);
 		glVertex3f(40,25,-5);
 		glVertex3f(40,25,-25);
 		glVertex3f(40,30,-25);
@@ -203,6 +220,7 @@ static void box(double x,double y,double z,
 	glEnd();
 
 	glBegin(GL_POLYGON);
+		glNormal3f(-1,0,0);
 		glVertex3f(40,0,-25);
 		glVertex3f(40,0,-28);
 		glVertex3f(40,2,-30);
@@ -213,6 +231,7 @@ static void box(double x,double y,double z,
 
 	//******************** right wall ****************//
 	glBegin(GL_POLYGON);
+		glNormal3f(1,0,0);
 		glVertex3f(0,0,-2);
 		glVertex3f(0,0,-5);
 		glVertex3f(0,30,-5);
@@ -223,6 +242,7 @@ static void box(double x,double y,double z,
 	
 	//bottom bar
 	glBegin(GL_POLYGON);
+		glNormal3f(1,0,0);
 		glVertex3f(0,0,-5);
 		glVertex3f(0,0,-25);
 		glVertex3f(0,10,-25);
@@ -231,6 +251,7 @@ static void box(double x,double y,double z,
 	
 	//top bar
 	glBegin(GL_POLYGON);
+		glNormal3f(1,0,0);
 		glVertex3f(0,25,-5);
 		glVertex3f(0,25,-25);
 		glVertex3f(0,30,-25);
@@ -238,6 +259,7 @@ static void box(double x,double y,double z,
 	glEnd();
 	
 	glBegin(GL_POLYGON);
+		glNormal3f(1,0,0);
 		glVertex3f(0,0,-25);
 		glVertex3f(0,0,-28);
 		glVertex3f(0,2,-30);
@@ -249,6 +271,7 @@ static void box(double x,double y,double z,
 
 	//********************* back ***********************//
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,-1);
 		glVertex3f(0,2,-30);
 		glVertex3f(2,0,-30);
 		glVertex3f(38,0,-30);
@@ -280,6 +303,7 @@ static void plate(double x,double y,double z,
 	//****************  vertical logo bar ******************//
 		//front
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,1);
 		glVertex3f(2,0,0);
 		glVertex3f(4,0,0);
 		glVertex3f(5,1,0);
@@ -295,6 +319,7 @@ static void plate(double x,double y,double z,
 	glEnd();
 	
 	glBegin(GL_POLYGON);
+		glNormal3f(0,0,1);
 		glVertex3f(2,0,1);
 		glVertex3f(4,0,1);
 		glVertex3f(5,1,1);
@@ -312,21 +337,25 @@ static void plate(double x,double y,double z,
 	//left cylinder stand
 	glBegin(GL_QUADS);
 		//front
+		glNormal3f(0,0,1);
 		glVertex3f(0,0,1.5);
 		glVertex3f(2,0,1.5);
 		glVertex3f(2,10,1.5);
 		glVertex3f(0,10,1.5);
 		//left
+		glNormal3f(-1,0,0);
 		glVertex3f(0,0,1.5);
 		glVertex3f(0,0,-.5);
 		glVertex3f(0,10,-.5);
 		glVertex3f(0,10,1.5);
-		//right
+		//rightp
+		glNormal3f(1,0,0);
 		glVertex3f(2,0,1.5);
 		glVertex3f(2,0,-.5);
 		glVertex3f(2,10,-.5);
 		glVertex3f(2,10,1.5);
 		//back
+		glNormal3f(0,0,-1);
 		glVertex3f(0,0,-.5);
 		glVertex3f(2,0,-.5);
 		glVertex3f(2,10,-.5);
@@ -334,82 +363,99 @@ static void plate(double x,double y,double z,
 	
 	//right cylinder stand	
 		//front
+		glNormal3f(0,0,1);
 		glVertex3f(18,0,1.5);
 		glVertex3f(20,0,1.5);
 		glVertex3f(20,10,1.5);
 		glVertex3f(18,10,1.5);
 		//left
+		glNormal3f(-1,0,0);
 		glVertex3f(18,0,1.5);
 		glVertex3f(18,0,-.5);
 		glVertex3f(18,10,-.5);
 		glVertex3f(18,10,1.5);
 		//right
+		glNormal3f(1,0,0);
 		glVertex3f(20,0,1.5);
 		glVertex3f(20,0,-.5);
 		glVertex3f(20,10,-.5);
 		glVertex3f(20,10,1.5);
 		//back
+		glNormal3f(0,0,-1);
 		glVertex3f(18,0,-.5);
 		glVertex3f(20,0,-.5);
 		glVertex3f(20,10,-.5);
 		glVertex3f(18,10,-.5);
 	glEnd();
 
-	//**************** printing plate *********************//
+	//**************** printing plate holder*********************//
 	glBegin(GL_QUADS);
 		//front
+		glNormal3f(0,0,1);
 		glVertex3f(2,0,25);
 		glVertex3f(18,0,25);
 		glVertex3f(18,1,25);
 		glVertex3f(2,1,25);
 		
+		glNormal3f(0,0,1);
 		glVertex3f(2,1,25);
 		glVertex3f(18,1,25);
 		glVertex3f(18,2,23);
 		glVertex3f(2,2,23);
 	
+		glNormal3f(0,0,1);
 		glVertex3f(2,0,23);
 		glVertex3f(18,0,23);
 		glVertex3f(18,2,23);
 		glVertex3f(2,2,23);
 		
 		//plate bridge-left
+		//bootom
+		glNormal3f(0,-1,0);
 		glVertex3f(0,-1,0);
 		glVertex3f(0,-1,25);
 		glVertex3f(2,-1,25);
 		glVertex3f(2,-1,0);
-
+		//top
+		glNormal3f(0,1,0);
 		glVertex3f(0,1,0);
 		glVertex3f(0,1,25);
 		glVertex3f(2,1,25);
 		glVertex3f(2,1,0);
-		
+		//left	
+		glNormal3f(-1,0,0);
 		glVertex3f(0,-1,0);
 		glVertex3f(0,-1,25);
 		glVertex3f(0,1,25);
 		glVertex3f(0,1,0);
-		
+		//right
+		glNormal3f(1,0,0);
 		glVertex3f(2,-1,0);
 		glVertex3f(2,-1,25);
 		glVertex3f(2,1,25);
 		glVertex3f(2,1,0);
 
 		//plate bridge-right
+		//bottm
+		glNormal3f(0,-1,0);
 		glVertex3f(18,-1,0);
 		glVertex3f(18,-1,25);
 		glVertex3f(20,-1,25);
 		glVertex3f(20,-1,0);
-		
+		//top
+		glNormal3f(0,1,0);
 		glVertex3f(18,1,0);
 		glVertex3f(18,1,25);
 		glVertex3f(20,1,25);
 		glVertex3f(20,1,0);
-		
+		//left	
+		glNormal3f(-1,0,0);
 		glVertex3f(18,-1,0);
 		glVertex3f(18,-1,25);
 		glVertex3f(18,1,25);
 		glVertex3f(18,1,0);
-		
+		//right
+		glNormal3f(1,0,0);
 		glVertex3f(20,-1,0);
 		glVertex3f(20,-1,25);
 		glVertex3f(20,1,25);
@@ -539,10 +585,10 @@ void display()
      glDisable(GL_LIGHTING);
 
 
-	box(0,0,0,              .2,.2,.2, 0);
+	box(-3,0,3,              .2,.2,.2, 0);
 	plate(-5,0,0,				.2,.2,.2, 0);	
   
-  spool(0,0,0,		1,1,1, 0);
+  spool(3,4,-5,		1,1,1, 0);
 
 	header(0,0,5, .2,.2,.2, 0);
 	ErrCheck("display");

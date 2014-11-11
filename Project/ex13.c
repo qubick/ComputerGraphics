@@ -1,26 +1,3 @@
-/*
- *  Lighting
- *
- *  Demonstrates basic lighting using a sphere and a cube.
- *
- *  Key bindings:
- *  l          Toggles lighting
- *  a/A        Decrease/increase ambient light
- *  b/B			Toggle light source rotation aze - horizontal/vertical
- *  d/D        Decrease/increase diffuse light
- *  s/S        Decrease/increase specular light
- *  e/E        Decrease/increase emitted light
- *  n/N        Decrease/increase shininess
- *  F3         Increase light distance gradually from 1 to 5
- *  m          Toggles light movement
- *  []         Lower/rise light
- *  p          Toggles ortogonal/perspective projection
- *  +/-        Change field of view of perspective
- *  arrows     Change view angle
- *  PgDn/PgUp  Zoom in and out
- *  0          Reset view angle
- *  ESC        Exit
- */
 #include "CSCIx229.h"
 
 int axes=1;       //  Display axes
@@ -73,20 +50,26 @@ static void spool(double x, double y, double z,
 						double th)
 {
 
-	int i = 0;
+	double i = 0.0;
 
 	glPushMatrix();
 	glTranslated(x,y,z);
 	glRotated(th,0,1,0);
 	glScaled(dx, dy, dz);
 
-	glColor3f(1,0,0); //red spool
+	glColor3f(1,1,1); //spool rack
 
-   glColor3f(1,1,1);
-
+	//front
 	glBegin(GL_POLYGON);
-	for(i=-10; i<100; i++){
-		glVertex3f(i,-.1, 10);
+	for(i=0; i<2*PI; i+= PI/12){
+		glVertex3f(cos(i)*RADIUS*1.5, sin(i)*RADIUS*1.2, 0);
+	}
+	glEnd();
+	
+	//back
+	glBegin(GL_POLYGON);
+	for(i=0; i<2*PI; i+= PI/12){
+		glVertex3f(cos(i)*RADIUS*1.5, sin(i)*RADIUS*1.2, 1);
 	}
 	glEnd();
 	glPopMatrix();

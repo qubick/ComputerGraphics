@@ -84,6 +84,68 @@ static void spool(double x, double y, double z,
 
 	glPopMatrix();
 }
+static void desk(double x, double y, double z,
+						double dx, double dy, double dz,
+						double th)
+{
+
+   float yellow[] = {1.0,1.0,0.0,1.0};
+   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
+	
+	//  Save transformation
+	glPushMatrix();
+	//  Offset
+	glTranslated(x,y,z);
+	glRotated(th,0,1,0);
+	glScaled(dx,dy,dz);
+
+   glColor3f(1,1,0); //yellow
+   glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
+   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
+   glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
+
+	glBegin(GL_QUADS);
+	//************************ table top **************//
+		//top
+		glNormal3f(0,1,0);
+		glVertex3f(0,0,0);
+		glVertex3f(10,0,0);
+		glVertex3f(10,0,7);
+		glVertex3f(0,0,7);
+		//bottom
+		glNormal3f(0,-1,0);
+		glVertex3f(0,-1,0);
+		glVertex3f(10,-1,0);
+		glVertex3f(10,-1,7);
+		glVertex3f(0,-1,7);
+		//back
+		glNormal3f(0,0,-1);
+		glVertex3f(0,0,0);
+		glVertex3f(0,-1,0);
+		glVertex3f(10,-1,0);
+		glVertex3f(10,0,0);
+		//front
+		glNormal3f(0,0,1);
+		glVertex3f(0,0,7);
+		glVertex3f(0,-1,7);
+		glVertex3f(10,-1,7);
+		glVertex3f(10,0,7);
+		//left
+		glNormal3f(-1,0,0);
+		glVertex3f(0,0,0);
+		glVertex3f(0,-1,0);
+		glVertex3f(0,-1,7);
+		glVertex3f(0,0,7);
+		//right
+		glNormal3f(1,0,0);
+		glVertex3f(10,0,0);
+		glVertex3f(10,-1,0);
+		glVertex3f(10,-1,7);
+		glVertex3f(10,0,7);
+	glEnd();
+	glPopMatrix();
+
+}
 
 static void header(double x,double y,double z,
                  double dx,double dy, double dz,
@@ -301,7 +363,7 @@ static void plate(double x,double y,double z,
 	glColor3f(1,1,1); //red
 	
 	//****************  vertical logo bar ******************//
-		//front
+	//front
 	glBegin(GL_POLYGON);
 		glNormal3f(0,0,1);
 		glVertex3f(2,0,0);
@@ -360,7 +422,7 @@ static void plate(double x,double y,double z,
 		glVertex3f(2,0,-.5);
 		glVertex3f(2,10,-.5);
 		glVertex3f(0,10,-.5);
-	
+
 	//right cylinder stand	
 		//front
 		glNormal3f(0,0,1);
@@ -390,27 +452,33 @@ static void plate(double x,double y,double z,
 
 	//**************** printing plate holder*********************//
 	glBegin(GL_QUADS);
+		//bidge-front
 		//front
 		glNormal3f(0,0,1);
 		glVertex3f(2,0,25);
 		glVertex3f(18,0,25);
 		glVertex3f(18,1,25);
 		glVertex3f(2,1,25);
-		
+		//slide
 		glNormal3f(0,0,1);
 		glVertex3f(2,1,25);
 		glVertex3f(18,1,25);
 		glVertex3f(18,2,23);
 		glVertex3f(2,2,23);
-	
+		//back
 		glNormal3f(0,0,1);
 		glVertex3f(2,0,23);
 		glVertex3f(18,0,23);
 		glVertex3f(18,2,23);
 		glVertex3f(2,2,23);
-		
-		//plate bridge-left
-		//bootom
+		//bottom	
+		glNormal3f(0,-1,0);
+		glVertex3f(2,0,25);
+		glVertex3f(18,0,25);
+		glVertex3f(18,0,23);
+		glVertex3f(2,0,23);
+	//**************** plate bridge-left ***********************//
+		//bottom
 		glNormal3f(0,-1,0);
 		glVertex3f(0,-1,0);
 		glVertex3f(0,-1,25);
@@ -434,8 +502,21 @@ static void plate(double x,double y,double z,
 		glVertex3f(2,-1,25);
 		glVertex3f(2,1,25);
 		glVertex3f(2,1,0);
-
-		//plate bridge-right
+		//front
+		glColor3f(1,0,0);
+		glNormal3f(0,0,1);
+		glVertex3f(0,-1,0);
+		glVertex3f(0,-1,2);
+		glVertex3f(2,1,2);
+		glVertex3f(2,1,0);
+		//plate slot
+		//front
+		glNormal3f(0,0,1);
+		glVertex3f(4,2,23);
+		glVertex3f(5,2,23);
+		glVertex3f(5,3.5,23);
+		glVertex3f(4,3.5,23);
+	//***************** plate bridge-right ********************//
 		//bottm
 		glNormal3f(0,-1,0);
 		glVertex3f(18,-1,0);
@@ -460,6 +541,14 @@ static void plate(double x,double y,double z,
 		glVertex3f(20,-1,25);
 		glVertex3f(20,1,25);
 		glVertex3f(20,1,0);
+		
+		//plate slot
+		//front
+		glNormal3f(0,0,1);
+		glVertex3f(14,2,23);
+		glVertex3f(15,2,23);
+		glVertex3f(15,3.5,23);
+		glVertex3f(14,3.5,23);
 	glEnd();
 	//  Undo transformation
 	glPopMatrix();
@@ -584,11 +673,11 @@ void display()
    else
      glDisable(GL_LIGHTING);
 
-
+	desk(-7,-1,-5,	2,1,2, 0);
 	box(-3,0,3,              .2,.2,.2, 0);
-	plate(-5,0,0,				.2,.2,.2, 0);	
+	plate(-7,0,0,				.2,.2,.2, 0);	
   
-  spool(3,4,-5,		1,1,1, 0);
+  spool(3,4,-4.5,		1,1,1, 0);
 
 	header(0,0,5, .2,.2,.2, 0);
 	ErrCheck("display");

@@ -1,5 +1,4 @@
-# Example 13
-EXE=ex13
+EXE=makerbot
 
 # Main target
 all: $(EXE)
@@ -25,6 +24,7 @@ endif
 
 # Dependencies
 ex13.o: ex13.c CSCIx229.h
+#makerbot.o: ex13.c CSCIx229.h
 light.o: light.c CSCIx229.h
 fatal.o: fatal.c CSCIx229.h
 loadtexbmp.o: loadtexbmp.c CSCIx229.h
@@ -44,7 +44,7 @@ CSCIx229.a:fatal.o loadtexbmp.o print.o project.o errcheck.o object.o
 	g++ -c $(CFLG) $<
 
 #  Link
-ex13:ex13.o CSCIx229.a
+makerbot:ex13.o CSCIx229.a
 	gcc -O3 -o $@ $^   $(LIBS)
 	
 #  Clean

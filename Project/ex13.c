@@ -479,8 +479,10 @@ static void box(double x,double y,double z,
 	glEnd();
 	//  Undo transformations
 	
-	
-	cylinder(0,0,-10, .5,4,.5,	90);
+	//left cylinder
+	cylinder(11,15,-27, .7,15,.7,	90);
+	//right cylinder
+	cylinder(29,15,-27, .7,15,.7,	90);
 	glPopMatrix();
 }
 
@@ -826,7 +828,7 @@ void display()
 
 	header(baseHeight*3-3,5,0, .2,.2,.2, 0);
 	
-	cylinder(0,0,0, 1,1,1, 0);
+	//cylinder(0,0,0, 1,1,1, 0);
 
 	ErrCheck("display");
    glFlush();

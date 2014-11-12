@@ -20,6 +20,7 @@ double baseHeight = 0;
 #define PI	3.141592653589792384
 #define RADIUS	1
 #define offset 0.001
+#define DEF_D	5
 
 // Light values
 int one       =   1;  // Unit value
@@ -47,6 +48,32 @@ void setup(){
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
+
+static void cylinder(double x, double y, double z,
+						double dx, double dy, double dz,
+						double th)
+{
+
+	double i = 0.0;
+
+	glPushMatrix();
+	glTranslated(x,y,z);
+	glRotated(th,0,1,0);
+	glScaled(dx, dy, dz);
+
+	glColor3f(1,1,1); //spool rack
+
+	//front
+	glBegin(GL_QUAD_STRIP);
+		for(i=0; i<=360; i+=DEF_D){
+			glColor3f(1,1,0);
+			glVertex3f(Cos(i), +1, Sin(i));
+			glColor3f(0,1,0);
+			glVertex3f(Cos(i), -1, Sin(i));
+		}
+	glEnd();
+	glPopMatrix();
+}
 static void spool(double x, double y, double z,
 						double dx, double dy, double dz,
 						double th)
@@ -316,7 +343,7 @@ static void box(double x,double y,double z,
    glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
    glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
    glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
-	
+
 	//******************** front ****************//
 	glBegin(GL_POLYGON);
 		glNormal3f(0,0,1);
@@ -451,6 +478,9 @@ static void box(double x,double y,double z,
 		glVertex3f(0,28,-30);
 	glEnd();
 	//  Undo transformations
+	
+	
+	cylinder(0,0,-10, .5,4,.5,	90);
 	glPopMatrix();
 }
 
@@ -795,6 +825,9 @@ void display()
   spool(3,4,-4.5,		1,1,1, 0);
 
 	header(baseHeight*3-3,5,0, .2,.2,.2, 0);
+	
+	cylinder(0,0,0, 1,1,1, 0);
+
 	ErrCheck("display");
    glFlush();
    glutSwapBuffers();

@@ -86,8 +86,8 @@ static void spool(double x, double y, double z,
 
 	glPopMatrix();
 }
-/*
-static void printBase(double x, double y, double z,
+
+static void lcdPanel(double x, double y, double z,
 						double dx, double dy, double dz,
 						double th)
 {
@@ -109,11 +109,13 @@ static void printBase(double x, double y, double z,
 	glBegin(GL_QUADS);
 	glColor3f(0,0,1);
 
-		glVertex3f();
-		glVertex3f();
-		glVertex3f();
+	//	glVertex3f();
+	//	glVertex3f();
+	//	glVertex3f();
+	glEnd();
+	glPopMatrix();
 }
-*/
+
 static void printBase(double x, double y, double z,
 						double dx, double dy, double dz,
 						double th)

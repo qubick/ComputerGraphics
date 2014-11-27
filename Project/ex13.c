@@ -16,6 +16,11 @@ int ball_mode = 0;
 
 double baseHeight = 0;
 
+#define FOOTAGE 1000
+double footage[FOOTAGE][3];
+int printIndex = 0;
+
+
 #define SCALE_FACTOR	0.8
 #define PI	3.141592653589792384
 #define RADIUS	1
@@ -748,6 +753,8 @@ static void ball(double x,double y,double z,double r)
  */
 void display()
 {
+
+	int i = 0;
    //  Erase the window and the depth buffer
    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
@@ -818,12 +825,14 @@ void display()
 	lcdPanel(2.6,.8,3.1, .8,.8,.8, 0);	
 	plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
   
-  spool(3,4,-4.5,		1,1,1, 0);
+  	spool(3,4,-4.5,		1,1,1, 0);
 
 	header(baseHeight*3-3,5,0, .2,.2,.2, 0);
 	
-	//cylinder(0,0,0, 1,1,1, 0);
-
+	
+	for (i=0; i<FOOTAGE; i++){
+		ball(footage[i][0], footage[i][1], footage[i][2], 0.05);
+	}
 	ErrCheck("display");
    glFlush();
    glutSwapBuffers();
@@ -839,7 +848,15 @@ void idle()
 
 	zh = fmod(90*t,360.0);
    //  Tell GLUT it is necessary to redisplay the scene
-		baseHeight = sin(t)+1;
+	baseHeight = sin(t)+1;
+
+	if (printIndex<FOOTAGE){
+		footage[printIndex][0] = baseHeight*3-3;
+		footage[printIndex][1] = 5;
+		footage[printIndex][2] = 0;
+
+		printIndex++;
+	}
 
 	glutPostRedisplay();
 }

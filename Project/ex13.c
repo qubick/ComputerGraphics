@@ -103,14 +103,6 @@ static void spool(double x, double y, double z,
 	glEnd();
 
 
-	/****************** cylinder how? ************
-	glBegin(GL_POLYGON);
-	for(i=0; i<2*PI; i+=PI/12){
-		glVertex3f(cos(i)*RADIUS, sin(i)*RADIUS, 0);
-	}
-	glEnd();
-	*********************************************/
-
 	glPopMatrix();
 }
 
@@ -134,11 +126,13 @@ static void lcdPanel(double x, double y, double z,
    glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
 
 	glBegin(GL_QUADS);
-	glColor3f(0,0,1);
+	glColor3f(0,.3,1);
 
-	//	glVertex3f();
-	//	glVertex3f();
-	//	glVertex3f();
+		glVertex3f(0,0,0);
+		glVertex3f(2,0,0);
+		glVertex3f(2,1,0);
+		glVertex3f(0,1,0);
+	
 	glEnd();
 	glPopMatrix();
 }
@@ -821,7 +815,7 @@ void display()
 
 	desk(-7,-1,-5,	2,1,2, 0);
 	box(-3,0,3,              .2,.2,.2, 0);
-	
+	lcdPanel(2.6,.8,3.1, .8,.8,.8, 0);	
 	plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
   
   spool(3,4,-4.5,		1,1,1, 0);

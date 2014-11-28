@@ -14,7 +14,7 @@ int view = 0;
 int time=0;
 int ball_mode = 0;
 
-double baseHeight = 0;
+double baseHeight = 3;
 double headerX = 0;
 double headerY = 0;
 
@@ -833,8 +833,8 @@ void display()
 	desk(-7,-1,-5,	2,1,2, 0);
 	box(-3,0,3,              .2,.2,.2, 0);
 	lcdPanel(2.6,.8,3.1, .8,.8,.8, 0);	
-	//plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
-	plate(-1,1,-2.5,				.2,.2,.2, 0);	
+	plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
+	//plate(-1,1,-2.5,				.2,.2,.2, 0);	
 	
   	spool(3,4,-4.5,		1,1,1, 0);
 
@@ -855,54 +855,57 @@ void display()
 void idle()
 {
    //  Elapsed time in seconds
-	double t = glutGet(GLUT_ELAPSED_TIME)/1000.0*0.5;
+	double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
+	double slowT = t*0.3;
+	double prevT = abs(glutGet(GLUT_ELAPSED_TIME)/1000.0); 
 	// header movement
 	double headerT = t*0.5; 
 
 	zh = fmod(90*t,360.0);
 
    //  Tell GLUT it is necessary to redisplay the scene
-	baseHeight = abs(t)*0.1;
+	if (baseHeight>0)
+		baseHeight = baseHeight-abs(slowT)*0.1;
 	headerX = sin(headerT)+1;
 
 
-	if(t>PI/2 && t< PI ){
-		footW = sin(t);
+	if(slowT>PI/2 && slowT< PI ){
+		footW = sin(slowT);
 		if (printIndex<FOOTAGE){
 			footage[printIndex][0] = footW;
-			footage[printIndex][1] = footD+footheight+3;
+			footage[printIndex][1] = footD+footheight+2;
 			footage[printIndex][2] = footH;
 
 			printIndex++;
 		}
-	} else if (t >= PI && t<PI*3/2){
-		footH = sin(t);
+	} else if (slowT >= PI && slowT<PI*3/2){
+		footH = sin(slowT);
 		if (printIndex<FOOTAGE){
 			footage[printIndex][0] = footW;
-			footage[printIndex][1] = footD+footheight+3;
+			footage[printIndex][1] = footD+footheight+2;
 			footage[printIndex][2] = footH;
 
 			printIndex++;
 		}	
-	} else if (t > PI*3/4 && t < 2*PI){
-		footW = sin(t);
+	} else if (slowT > PI*3/4 && slowT < 2*PI){
+		footW = sin(slowT);
 		if (printIndex<FOOTAGE){
-			footage[printIndex][0] = footW+1;
-			footage[printIndex][1] = footD+footheight+3;
+			footage[printIndex][0] = footW+1.1;
+			footage[printIndex][1] = footD+footheight+2;
 			footage[printIndex][2] = footH;
 
 			printIndex++;
 		}	
-	} else if (t> 2*PI){
+	} /* else if (t> 2*PI){
 		footH = sin(t);
 		if (printIndex<FOOTAGE){
-			footage[printIndex][0] = footW+1;
-			footage[printIndex][1] = footD+footheight+3;
+			footage[printIndex][0] = footW+1.1;
+			footage[printIndex][1] = footD+footheight+2;
 			footage[printIndex][2] = footH-1;
 
 			printIndex++;
 		}	
-	}
+	}*/
 
 	glutPostRedisplay();
 }

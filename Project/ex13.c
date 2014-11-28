@@ -857,25 +857,21 @@ void idle()
 {
    //  Elapsed time in seconds
 	double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
-	double slowT = t*0.3;
-	double prevT = abs(glutGet(GLUT_ELAPSED_TIME)/1000.0); 
 	// header movement
-	double headerT = t*0.5; 
-//	double x;
 
 	zh = fmod(90*t,360.0);
 
    //  Tell GLUT it is necessary to redisplay the scene
 	if (baseHeight>0)
-		baseHeight = baseHeight-abs(slowT)*0.1;
-	headerX = sin(headerT)+1;
+		baseHeight = baseHeight-abs(t*0.3)*0.1;
+	headerX = sin(t*0.5)+1;
 
 
 	if(sin(period)>=0 && cos(period)>=0){
 		footW = sin(period);
 			if (printIndex<FOOTAGE){
 				footage[printIndex][0] = footW;
-				footage[printIndex][1] = footD+footheight+2;
+				footage[printIndex][1] = footD+2;
 				footage[printIndex][2] = footH;
 			}
 			period += 0.05;
@@ -885,7 +881,7 @@ void idle()
 			footH = sin(period-PI/2);
 			if (printIndex<FOOTAGE){
 				footage[printIndex][0] = footW;
-				footage[printIndex][1] = footD+footheight+2;
+				footage[printIndex][1] = footD+2;
 				footage[printIndex][2] = footH;
 
 			}
@@ -893,10 +889,10 @@ void idle()
 			footH = footage[printIndex++][2]; //last y
 		}	
 	else if(sin(period)<=0 && cos(period)<=0){
-			footW = sin(period);
+			footW = sin(period-PI/2);
 			if (printIndex<FOOTAGE){
-				footage[printIndex][0] = footW+footH;
-				footage[printIndex][1] = footD+footheight+2;
+				footage[printIndex][0] = footW;
+				footage[printIndex][1] = footD+2;
 				footage[printIndex][2] = footH;
 			}
 			period += 0.05;
@@ -906,13 +902,16 @@ void idle()
 			footH = sin(period-PI);
 			if (printIndex<FOOTAGE){
 				footage[printIndex][0] = footW;
-				footage[printIndex][1] = footD+footheight+2;
+				footage[printIndex][1] = footD+2;
 				footage[printIndex][2] = footH;
 			}
 			period += 0.05;
 			footH = footage[printIndex++][2]; //last y
 	}
-
+	if (period > 2*PI){
+		period -= 2*PI;
+		footD += .05;
+	}
 	glutPostRedisplay();
 }
 

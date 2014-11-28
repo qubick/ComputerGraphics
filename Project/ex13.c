@@ -30,6 +30,7 @@ int printIndex = 0;
 double footW = 0;
 double footH = 0;
 double footD = 0;
+double period = 0;
 
 #define SCALE_FACTOR	0.8
 #define PI	3.141592653589792384
@@ -833,8 +834,8 @@ void display()
 	desk(-7,-1,-5,	2,1,2, 0);
 	box(-3,0,3,              .2,.2,.2, 0);
 	lcdPanel(2.6,.8,3.1, .8,.8,.8, 0);	
-	plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
-	//plate(-1,1,-2.5,				.2,.2,.2, 0);	
+	//plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
+	plate(-1,1,-2.5,				.2,.2,.2, 0);	
 	
   	spool(3,4,-4.5,		1,1,1, 0);
 
@@ -860,6 +861,7 @@ void idle()
 	double prevT = abs(glutGet(GLUT_ELAPSED_TIME)/1000.0); 
 	// header movement
 	double headerT = t*0.5; 
+//	double x;
 
 	zh = fmod(90*t,360.0);
 
@@ -869,43 +871,52 @@ void idle()
 	headerX = sin(headerT)+1;
 
 
-	if(slowT>PI/2 && slowT< PI ){
-		footW = sin(slowT);
-		if (printIndex<FOOTAGE){
-			footage[printIndex][0] = footW;
-			footage[printIndex][1] = footD+footheight+2;
-			footage[printIndex][2] = footH;
+	if(sin(period)>=0 && cos(period)>=0){
+		footW = sin(period);
+//printf("W at printIndex[%d]: %f\n",footW,printIndex);
+			if (printIndex<FOOTAGE){
+				footage[printIndex][0] = footW;
+				footage[printIndex][1] = footD+footheight+2;
+				footage[printIndex][2] = footH;
 
-			printIndex++;
+				printIndex++;
+			}
+			period += 0.1;
 		}
-	} else if (slowT >= PI && slowT<PI*3/2){
-		footH = sin(slowT);
-		if (printIndex<FOOTAGE){
-			footage[printIndex][0] = footW;
-			footage[printIndex][1] = footD+footheight+2;
-			footage[printIndex][2] = footH;
+	else if(sin(period)>=0 && cos(period)<=0){
+			footH = sin(period);
+//printf("W at printIndex[%d]: %f\n",footW,printIndex);
+			if (printIndex<FOOTAGE){
+				footage[printIndex][0] = footW;
+				footage[printIndex][1] = footD+footheight+2;
+				footage[printIndex][2] = footH;
 
-			printIndex++;
+				printIndex++;
+			}
+			period += 0.1;
 		}	
-	} else if (slowT > PI*3/4 && slowT < 2*PI){
-		footW = sin(slowT);
-		if (printIndex<FOOTAGE){
-			footage[printIndex][0] = footW+1.1;
-			footage[printIndex][1] = footD+footheight+2;
-			footage[printIndex][2] = footH;
+	else if(sin(period)<=0 && cos(period)<=0){
+			footW = sin(period);
+			if (printIndex<FOOTAGE){
+				footage[printIndex][0] = footW;
+				footage[printIndex][1] = footD+footheight+2;
+				footage[printIndex][2] = footH;
 
-			printIndex++;
+				printIndex++;
+			}
+			period += 0.1;
 		}	
-	} /* else if (t> 2*PI){
-		footH = sin(t);
-		if (printIndex<FOOTAGE){
-			footage[printIndex][0] = footW+1.1;
-			footage[printIndex][1] = footD+footheight+2;
-			footage[printIndex][2] = footH-1;
+	else if(sin(period)<=0 && cos(period)>=0){	
+			footH = sin(period);
+			if (printIndex<FOOTAGE){
+				footage[printIndex][0] = footW;
+				footage[printIndex][1] = footD+footheight+2;
+				footage[printIndex][2] = footH;
 
-			printIndex++;
-		}	
-	}*/
+				printIndex++;
+			}
+			period += 0.1;
+	}
 
 	glutPostRedisplay();
 }

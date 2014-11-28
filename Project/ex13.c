@@ -9,7 +9,7 @@ int zh=0;
 int fov=55;       //  Field of view (for perspective)
 int light=1;      //  Lighting
 double asp=1;     //  Aspect ratio
-double dim=6.0;   //  Size of world
+double dim=7.0;   //  Size of world
 int view = 0;
 int time=0;
 int ball_mode = 0;
@@ -833,11 +833,12 @@ void display()
 	desk(-7,-1,-5,	2,1,2, 0);
 	box(-3,0,3,              .2,.2,.2, 0);
 	lcdPanel(2.6,.8,3.1, .8,.8,.8, 0);	
-	plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
-
+	//plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
+	plate(-1,1,-2.5,				.2,.2,.2, 0);	
+	
   	spool(3,4,-4.5,		1,1,1, 0);
 
-	header(headerX*3-3,5,0, .2,.2,.2, 0);
+	//header(headerX*3-3,5,0, .2,.2,.2, 0);
 	
 	
 	for (i=0; i<FOOTAGE; i++){
@@ -854,7 +855,7 @@ void display()
 void idle()
 {
    //  Elapsed time in seconds
-	double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
+	double t = glutGet(GLUT_ELAPSED_TIME)/1000.0*0.5;
 	// header movement
 	double headerT = t*0.5; 
 
@@ -865,7 +866,7 @@ void idle()
 	headerX = sin(headerT)+1;
 
 
-	if(t< 2/PI ){
+	if(t>PI/2 && t< PI ){
 		footW = sin(t);
 		if (printIndex<FOOTAGE){
 			footage[printIndex][0] = footW;
@@ -874,27 +875,35 @@ void idle()
 
 			printIndex++;
 		}
-	} /*else if (t >= PI/2 && t<PI){
-		footH = cos(t);
-		printf("W is: %f, \t H is: %f\n", footW, footH);
+	} else if (t >= PI && t<PI*3/2){
+		footH = sin(t);
 		if (printIndex<FOOTAGE){
 			footage[printIndex][0] = footW;
-			footage[printIndex][1] = footD+footheight;
-			footage[printIndex][2] = footH+5;
+			footage[printIndex][1] = footD+footheight+3;
+			footage[printIndex][2] = footH;
 
 			printIndex++;
 		}	
-	} else if (t > PI){
-		footW = -sin(t);
+	} else if (t > PI*3/4 && t < 2*PI){
+		footW = sin(t);
 		if (printIndex<FOOTAGE){
-			footage[printIndex][0] = footW;
-			footage[printIndex][1] = footD+footheight;
-			footage[printIndex][2] = footH+5;
+			footage[printIndex][0] = footW+1;
+			footage[printIndex][1] = footD+footheight+3;
+			footage[printIndex][2] = footH;
+
+			printIndex++;
+		}	
+	} else if (t> 2*PI){
+		footH = sin(t);
+		if (printIndex<FOOTAGE){
+			footage[printIndex][0] = footW+1;
+			footage[printIndex][1] = footD+footheight+3;
+			footage[printIndex][2] = footH-1;
 
 			printIndex++;
 		}	
 	}
-*/
+
 	glutPostRedisplay();
 }
 

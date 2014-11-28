@@ -834,7 +834,7 @@ void display()
 	box(-3,0,3,              .2,.2,.2, 0);
 	lcdPanel(2.6,.8,3.1, .8,.8,.8, 0);	
 	plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
-  
+
   	spool(3,4,-4.5,		1,1,1, 0);
 
 	header(headerX*3-3,5,0, .2,.2,.2, 0);
@@ -861,21 +861,22 @@ void idle()
 	zh = fmod(90*t,360.0);
 
    //  Tell GLUT it is necessary to redisplay the scene
-	baseHeight = sin(t)*0.5; 
+	baseHeight = abs(t)*0.1;
 	headerX = sin(headerT)+1;
 
 
-	if(t < 5 && sin(t)>0){
+	if(t< 2/PI ){
 		footW = sin(t);
 		if (printIndex<FOOTAGE){
 			footage[printIndex][0] = footW;
-			footage[printIndex][1] = footD+footheight;
-			footage[printIndex][2] = footH+5;
+			footage[printIndex][1] = footD+footheight+3;
+			footage[printIndex][2] = footH;
 
 			printIndex++;
 		}
-	} else if (t < 10){
-		footH = sin(t);
+	} /*else if (t >= PI/2 && t<PI){
+		footH = cos(t);
+		printf("W is: %f, \t H is: %f\n", footW, footH);
 		if (printIndex<FOOTAGE){
 			footage[printIndex][0] = footW;
 			footage[printIndex][1] = footD+footheight;
@@ -883,7 +884,7 @@ void idle()
 
 			printIndex++;
 		}	
-	} else if (t < 15){
+	} else if (t > PI){
 		footW = -sin(t);
 		if (printIndex<FOOTAGE){
 			footage[printIndex][0] = footW;
@@ -893,7 +894,7 @@ void idle()
 			printIndex++;
 		}	
 	}
-
+*/
 	glutPostRedisplay();
 }
 

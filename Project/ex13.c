@@ -873,49 +873,44 @@ void idle()
 
 	if(sin(period)>=0 && cos(period)>=0){
 		footW = sin(period);
-//printf("W at printIndex[%d]: %f\n",footW,printIndex);
 			if (printIndex<FOOTAGE){
 				footage[printIndex][0] = footW;
 				footage[printIndex][1] = footD+footheight+2;
 				footage[printIndex][2] = footH;
-
-				printIndex++;
 			}
-			period += 0.1;
+			period += 0.05;
+			footW = footage[printIndex++][0]; //last x
 		}
 	else if(sin(period)>=0 && cos(period)<=0){
-			footH = sin(period);
-//printf("W at printIndex[%d]: %f\n",footW,printIndex);
+			footH = sin(period-PI/2);
 			if (printIndex<FOOTAGE){
 				footage[printIndex][0] = footW;
 				footage[printIndex][1] = footD+footheight+2;
 				footage[printIndex][2] = footH;
 
-				printIndex++;
 			}
-			period += 0.1;
+			period += 0.05;
+			footH = footage[printIndex++][2]; //last y
 		}	
 	else if(sin(period)<=0 && cos(period)<=0){
 			footW = sin(period);
 			if (printIndex<FOOTAGE){
-				footage[printIndex][0] = footW;
+				footage[printIndex][0] = footW+footH;
 				footage[printIndex][1] = footD+footheight+2;
 				footage[printIndex][2] = footH;
-
-				printIndex++;
 			}
-			period += 0.1;
+			period += 0.05;
+			footW = footage[printIndex++][0]; //last x
 		}	
-	else if(sin(period)<=0 && cos(period)>=0){	
-			footH = sin(period);
+	else if(sin(period)<=0 && cos(period)>=0){
+			footH = sin(period-PI);
 			if (printIndex<FOOTAGE){
 				footage[printIndex][0] = footW;
 				footage[printIndex][1] = footD+footheight+2;
 				footage[printIndex][2] = footH;
-
-				printIndex++;
 			}
-			period += 0.1;
+			period += 0.05;
+			footH = footage[printIndex++][2]; //last y
 	}
 
 	glutPostRedisplay();

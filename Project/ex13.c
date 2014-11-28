@@ -9,17 +9,27 @@ int zh=0;
 int fov=55;       //  Field of view (for perspective)
 int light=1;      //  Lighting
 double asp=1;     //  Aspect ratio
-double dim=5.0;   //  Size of world
+double dim=6.0;   //  Size of world
 int view = 0;
 int time=0;
 int ball_mode = 0;
 
 double baseHeight = 0;
+double headerX = 0;
+double headerY = 0;
 
-#define FOOTAGE 1000
+#define FOOTAGE 500
+#define CUBEW	10
+#define CUBEH	10
+#define CUBED	5
+
 double footage[FOOTAGE][3];
+double footheight = 0;
 int printIndex = 0;
 
+double footW = 0;
+double footH = 0;
+double footD = 0;
 
 #define SCALE_FACTOR	0.8
 #define PI	3.141592653589792384
@@ -827,7 +837,7 @@ void display()
   
   	spool(3,4,-4.5,		1,1,1, 0);
 
-	header(baseHeight*3-3,5,0, .2,.2,.2, 0);
+	header(headerX*3-3,5,0, .2,.2,.2, 0);
 	
 	
 	for (i=0; i<FOOTAGE; i++){
@@ -844,18 +854,44 @@ void display()
 void idle()
 {
    //  Elapsed time in seconds
-   double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
+	double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
+	// header movement
+	double headerT = t*0.5; 
 
 	zh = fmod(90*t,360.0);
+
    //  Tell GLUT it is necessary to redisplay the scene
-	baseHeight = sin(t)+1;
+	baseHeight = sin(t)*0.5; 
+	headerX = sin(headerT)+1;
 
-	if (printIndex<FOOTAGE){
-		footage[printIndex][0] = baseHeight*3-3;
-		footage[printIndex][1] = 5;
-		footage[printIndex][2] = 0;
 
-		printIndex++;
+	if(t < 5 && sin(t)>0){
+		footW = sin(t);
+		if (printIndex<FOOTAGE){
+			footage[printIndex][0] = footW;
+			footage[printIndex][1] = footD+footheight;
+			footage[printIndex][2] = footH+5;
+
+			printIndex++;
+		}
+	} else if (t < 10){
+		footH = sin(t);
+		if (printIndex<FOOTAGE){
+			footage[printIndex][0] = footW;
+			footage[printIndex][1] = footD+footheight;
+			footage[printIndex][2] = footH+5;
+
+			printIndex++;
+		}	
+	} else if (t < 15){
+		footW = -sin(t);
+		if (printIndex<FOOTAGE){
+			footage[printIndex][0] = footW;
+			footage[printIndex][1] = footD+footheight;
+			footage[printIndex][2] = footH+5;
+
+			printIndex++;
+		}	
 	}
 
 	glutPostRedisplay();
@@ -997,7 +1033,7 @@ int main(int argc,char* argv[])
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    glClearColor(1,1,1,1);
 	glColor3f(1.0f, 1.0f, 1.0f);
-	glutInitWindowSize(900,900);
+	glutInitWindowSize(600,600);
    glutCreateWindow("HW5_JeeeunKim_Lighting");
    //  Set callbacks
    glutDisplayFunc(display);

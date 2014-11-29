@@ -24,6 +24,10 @@ double headerY = 0;
 #define CUBEH	10
 #define CUBED	5
 
+//texture
+unsigned int texture[3];
+double rep=10; //repetition
+
 double footage[FOOTAGE][3];
 double footheight = 0;
 int printIndex = 0;
@@ -74,6 +78,10 @@ void sleep(int time){
 }
 
 void setup(){
+	//texture setup
+	texture[0] = LoadTexBMP("wood.bmp");
+	texture[1] = LoadTexBMP("water.bmp");	
+	//spool color setup
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	//white
 	color[WHITE][0] = 1.0;
@@ -308,6 +316,10 @@ static void desk(double x, double y, double z,
 	glRotated(th,0,1,0);
 	glScaled(dx,dy,dz);
 
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, texture[1]);
+
    //glColor3f(1,1,0); //yellow
    glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
    glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
@@ -317,10 +329,10 @@ static void desk(double x, double y, double z,
 	//************************ table top **************//
 		//top
 		glNormal3f(0,1,0);
-		glVertex3f(0,0,0);
-		glVertex3f(10,0,0);
-		glVertex3f(10,0,7);
-		glVertex3f(0,0,7);
+		glTexCoord2f(0.0, 0.0);	glVertex3f(0,0,0);
+		glTexCoord2f(0.0, rep); glVertex3f(10,0,0);
+		glTexCoord2f(rep, rep);	glVertex3f(10,0,7);
+		glTexCoord2f(rep, 0.0);	glVertex3f(0,0,7);
 		//bottom
 		glNormal3f(0,-1,0);
 		glVertex3f(0,-1,0);
@@ -352,6 +364,7 @@ static void desk(double x, double y, double z,
 		glVertex3f(10,-1,7);
 		glVertex3f(10,0,7);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
 
 }
@@ -1161,10 +1174,11 @@ int main(int argc,char* argv[])
    //  Initialize GLUT
    glutInit(&argc,argv);
    setup();
-	//  Request double buffered, true color window with Z buffering at 600x600
+	
+	//  Request double buffered, true color window
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-   glClearColor(1,1,1,1);
-	glColor3f(1.0f, 1.0f, 1.0f);
+   //glClearColor(1,1,1,1);
+	//glColor3f(1.0f, 1.0f, 1.0f);
 	glutInitWindowSize(600,600);
    glutCreateWindow("HW5_JeeeunKim_Lighting");
    //  Set callbacks
@@ -1173,7 +1187,8 @@ int main(int argc,char* argv[])
    glutSpecialFunc(special);
    glutKeyboardFunc(key);
    glutIdleFunc(idle);
-   //  Pass control to GLUT so it can interact with the user
+   
+	//  Pass control to GLUT so it can interact with the user
    ErrCheck("init");
    glutMainLoop();
    return 0;

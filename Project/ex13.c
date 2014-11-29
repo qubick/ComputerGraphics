@@ -68,7 +68,7 @@ int specular  =   0;  // Specular intensity (%)
 int shininess =   0;  // Shininess (power of two)
 float shinyvec[1];    // Shininess (value)
 int lzh        =  90;  // Light azimuth
-float ylight  =   0;  // Elevation of light
+float ylight  =   5;  // Elevation of light
 
 void sleep(int time){
 	int i,j = 0;
@@ -259,7 +259,6 @@ static void printBase(double x, double y, double z,
 
 	glBegin(GL_QUADS);
 	glColor3f(0,0,1);
-	//************************ table top **************//
 		//top
 		glNormal3f(0,1,0);
 		glVertex3f(0,0,0);
@@ -598,7 +597,6 @@ static void plate(double x,double y,double z,
 	glRotated(th,0,1,0);
 	glScaled(dx,dy,dz);
 
-	//glColor3f(0,0,1);
 	printBase(-7,2.5,1.5, 3.5,1.5,3, 0);
 	
 	glColor3f(1,1,1);

@@ -119,14 +119,15 @@ void setup(){
 
 static void cylinder(double x, double y, double z,
 						double dx, double dy, double dz,
-						double th)
+						double rx, double ry)
 {
 
 	double i = 0.0;
 
 	glPushMatrix();
 	glTranslated(x,y,z);
-	glRotated(th,0,1,0);
+	glRotated(rx,1,0,0);
+	glRotated(ry,0,1,0);
 	glScaled(dx, dy, dz);
 
 	glColor3f(1,1,1); //spool rack
@@ -154,22 +155,45 @@ static void spool(double x, double y, double z,
 	glRotated(th,0,1,0);
 	glScaled(dx, dy, dz);
 
-	glColor3f(1,1,1); //spool rack
+	glColor3f(1,0,0); //spool rack
 
-	//front
+	//back
+	cylinder(0,0,0, 1.2,.05,1.2,	90,0);
+	
 	glBegin(GL_POLYGON);
 	for(i=0; i<2*PI; i+= PI/12){
-		glVertex3f(cos(i)*RADIUS*1.5, sin(i)*RADIUS*1.2, 0);
+		glVertex3f(cos(i)*RADIUS*1.2, sin(i)*RADIUS*1.2, 0);
 	}
 	glEnd();
 	
-	//back
 	glBegin(GL_POLYGON);
 	for(i=0; i<2*PI; i+= PI/12){
-		glVertex3f(cos(i)*RADIUS*1.5, sin(i)*RADIUS*1.2, 1);
+		glVertex3f(cos(i)*RADIUS*1.2, sin(i)*RADIUS*1.2, 0.1);
+	}
+	glEnd();
+	
+	//the block hole in the middle?
+
+	//front - close to the box
+	cylinder(0,0,1, 1.2,.05,1.2,	90,0);
+
+	glBegin(GL_POLYGON);
+	for(i=0; i<2*PI; i+= PI/12){
+		glVertex3f(cos(i)*RADIUS*1.2, sin(i)*RADIUS*1.2, 1);
 	}
 	glEnd();
 
+	glBegin(GL_POLYGON);
+	for(i=0; i<2*PI; i+= PI/12){
+		glVertex3f(cos(i)*RADIUS*1.2, sin(i)*RADIUS*1.2, 1.1);
+	}
+	glEnd();
+
+	//axe
+	cylinder(0,0,.5, .8,.5,.8,	90,0);
+
+	//connector to the box
+	cylinder(0,0,1, .5,.5,.5,	90,0);
 
 	glPopMatrix();
 }
@@ -542,9 +566,9 @@ static void box(double x,double y,double z,
 	//  Undo transformations
 	
 	//left cylinder
-	cylinder(11,15,-27, .7,15,.7,	90);
+	cylinder(11,15,-27, .7,15,.7,	0,90);
 	//right cylinder
-	cylinder(29,15,-27, .7,15,.7,	90);
+	cylinder(29,15,-27, .7,15,.7,	0,90);
 	glPopMatrix();
 }
 
@@ -958,7 +982,7 @@ void idle()
 				footage[printIndex][1] = footD+2;
 				footage[printIndex][2] = footH;
 			}
-			period += 0.05;
+			period += 0.08;
 			footW = footage[printIndex++][0]; //last x
 		}
 	else if(sin(period)>=0 && cos(period)<=0){
@@ -969,7 +993,7 @@ void idle()
 				footage[printIndex][2] = footH;
 
 			}
-			period += 0.05;
+			period += 0.08;
 			footH = footage[printIndex++][2]; //last y
 		}	
 	else if(sin(period)<=0 && cos(period)<=0){
@@ -979,7 +1003,7 @@ void idle()
 				footage[printIndex][1] = footD+2;
 				footage[printIndex][2] = footH;
 			}
-			period += 0.05;
+			period += 0.08;
 			footW = footage[printIndex++][0]; //last x
 		}	
 	else if(sin(period)<=0 && cos(period)>=0){
@@ -989,12 +1013,12 @@ void idle()
 				footage[printIndex][1] = footD+2;
 				footage[printIndex][2] = footH;
 			}
-			period += 0.05;
+			period += 0.08;
 			footH = footage[printIndex++][2]; //last y
 	}
 	if (period > 2*PI){
 		period -= 2*PI;
-		footD += .05;
+		footD += .07;
 	}
 	glutPostRedisplay();
 }
@@ -1049,10 +1073,10 @@ void key(unsigned char ch,int x,int y)
       th = ph = 0;
 	else if (ch == 'b' || ch == 'B')
 		ball_mode = 1-ball_mode;
+	//toggle filament colors
 	else if (ch == 'c' || ch == 'C'){
 	  	cId++;
 		if(cId == 8) cId = 0;
-		printf("cId: %d\n", cId);
 	 }
 	//  Toggle axes
    else if (ch == 'x' || ch == 'X')

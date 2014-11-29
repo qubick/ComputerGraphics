@@ -40,9 +40,9 @@ double color[8][3];
 #define RED		1
 #define GREEN	2
 #define BLUE	3
-#define PINK	4
+#define YELLOW	4
 #define CYAN	5
-#define YELLOW	6
+#define PINK	6
 #define BLACK	7
 
 #define SCALE_FACTOR	0.8
@@ -79,10 +79,11 @@ void setup(){
 	color[WHITE][0] = 1.0;
 	color[WHITE][1] = 1.0;
 	color[WHITE][2] = 1.0;
+	
 	//red
 	color[RED][0] = 1.0;
-	color[RED][1] = 0;
-	color[RED][2] = 0;
+	color[RED][1] = 0.0;
+	color[RED][2] = 0.0;
 
 	//green
 	color[GREEN][0] = 0.0;
@@ -90,24 +91,24 @@ void setup(){
 	color[GREEN][2] = 0.0;
 	
 	//blue
-	color[GREEN][0] = 0.0;
-	color[GREEN][1] = 0.0;
-	color[GREEN][2] = 0.1;
+	color[BLUE][0] = 0.0;
+	color[BLUE][1] = 0.0;
+	color[BLUE][2] = 1.0;
 
-	//pink
-	color[PINK][0] = 1.0;
-	color[PINK][1] = 1.0;
-	color[PINK][2] = 0.0;
+	//YELLOW
+	color[YELLOW][0] = 1.0;
+	color[YELLOW][1] = 1.0;
+	color[YELLOW][2] = 0.0;
 
 	//skyblue
 	color[CYAN][0] = 0.0;
 	color[CYAN][1] = 1.0;
 	color[CYAN][2] = 1.0;
 
-	//yellow
-	color[YELLOW][0] = 1.0;
-	color[YELLOW][1] = 0.0;
-	color[YELLOW][2] = 1.0;
+	//PINK
+	color[PINK][0] = 1.0;
+	color[PINK][1] = 0.0;
+	color[PINK][2] = 1.0;
 
 	//black
 	color[BLACK][0] = 0.0;
@@ -1049,7 +1050,9 @@ void key(unsigned char ch,int x,int y)
 	else if (ch == 'b' || ch == 'B')
 		ball_mode = 1-ball_mode;
 	else if (ch == 'c' || ch == 'C'){
-	 	cId = 7-cId++;
+	  	cId++;
+		if(cId == 8) cId = 0;
+		printf("cId: %d\n", cId);
 	 }
 	//  Toggle axes
    else if (ch == 'x' || ch == 'X')

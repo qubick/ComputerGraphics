@@ -14,11 +14,12 @@ int view = 0;
 int time=0;
 int ball_mode = 0;
 
+//material pritning values
 double baseHeight = 3;
 double headerX = 0;
 double headerY = 0;
 
-#define FOOTAGE 500
+#define FOOTAGE 1000
 #define CUBEW	10
 #define CUBEH	10
 #define CUBED	5
@@ -31,6 +32,18 @@ double footW = 0;
 double footH = 0;
 double footD = 0;
 double period = 0;
+
+//define spool colors
+int 	 cId = 0;
+double color[8][3];
+#define WHITE	0
+#define RED		1
+#define GREEN	2
+#define BLUE	3
+#define PINK	4
+#define CYAN	5
+#define YELLOW	6
+#define BLACK	7
 
 #define SCALE_FACTOR	0.8
 #define PI	3.141592653589792384
@@ -62,6 +75,44 @@ void sleep(int time){
 
 void setup(){
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	//white
+	color[WHITE][0] = 1.0;
+	color[WHITE][1] = 1.0;
+	color[WHITE][2] = 1.0;
+	//red
+	color[RED][0] = 1.0;
+	color[RED][1] = 0;
+	color[RED][2] = 0;
+
+	//green
+	color[GREEN][0] = 0.0;
+	color[GREEN][1] = 1.0;
+	color[GREEN][2] = 0.0;
+	
+	//blue
+	color[GREEN][0] = 0.0;
+	color[GREEN][1] = 0.0;
+	color[GREEN][2] = 0.1;
+
+	//pink
+	color[PINK][0] = 1.0;
+	color[PINK][1] = 1.0;
+	color[PINK][2] = 0.0;
+
+	//skyblue
+	color[CYAN][0] = 0.0;
+	color[CYAN][1] = 1.0;
+	color[CYAN][2] = 1.0;
+
+	//yellow
+	color[YELLOW][0] = 1.0;
+	color[YELLOW][1] = 0.0;
+	color[YELLOW][2] = 1.0;
+
+	//black
+	color[BLACK][0] = 0.0;
+	color[BLACK][1] = 0.0;
+	color[BLACK][2] = 0.0;
 }
 
 
@@ -729,6 +780,38 @@ static void Vertex(double th,double ph)
  *     at (x,y,z)
  *     radius (r)
  */
+
+static void droplet(double x,double y,double z,double r)
+{
+   int th,ph;
+   float yellow[] = {1.0,1.0,0.0,1.0};
+   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
+   //  Save transformation
+   glPushMatrix();
+   //  Offset, scale and rotate
+   glTranslated(x,y,z);
+   glScaled(r,r,r);
+   //  White ball
+   glColor3f(color[cId][0],color[cId][1],color[cId][2]);
+   glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
+   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
+   glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
+   //  Bands of latitude
+   for (ph=-90;ph<90;ph+=inc)
+   {
+      glBegin(GL_QUAD_STRIP);
+      for (th=0;th<=360;th+=2*inc)
+      {
+         Vertex(th,ph);
+         Vertex(th,ph+inc);
+      }
+      glEnd();
+   }
+   //  Undo transofrmations
+   glPopMatrix();
+}
+
+
 static void ball(double x,double y,double z,double r)
 {
    int th,ph;
@@ -843,7 +926,7 @@ void display()
 	
 	
 	for (i=0; i<FOOTAGE; i++){
-		ball(footage[i][0], footage[i][1], footage[i][2], 0.05);
+		droplet(footage[i][0], footage[i][1], footage[i][2], 0.05);
 	}
 	ErrCheck("display");
    glFlush();
@@ -965,6 +1048,9 @@ void key(unsigned char ch,int x,int y)
       th = ph = 0;
 	else if (ch == 'b' || ch == 'B')
 		ball_mode = 1-ball_mode;
+	else if (ch == 'c' || ch == 'C'){
+	 	cId = 7-cId++;
+	 }
 	//  Toggle axes
    else if (ch == 'x' || ch == 'X')
       axes = 1-axes;
@@ -1047,7 +1133,8 @@ int main(int argc,char* argv[])
 {
    //  Initialize GLUT
    glutInit(&argc,argv);
-   //  Request double buffered, true color window with Z buffering at 600x600
+   setup();
+	//  Request double buffered, true color window with Z buffering at 600x600
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    glClearColor(1,1,1,1);
 	glColor3f(1.0f, 1.0f, 1.0f);

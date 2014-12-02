@@ -34,7 +34,7 @@ int printIndex = 0;
 
 double footW = 0;
 double footH = 0;
-double footD = 0;
+double footD = 4;
 double period = 0;
 
 //define spool colors
@@ -953,8 +953,8 @@ void display()
 	desk(-7,-1,-5,	2,1,2, 0);
 	box(-3,0,3,              .2,.2,.2, 0);
 	lcdPanel(2.6,.8,3.1, .8,.8,.8, 0);	
-	//plate(-1,1+baseHeight,-2.5,				.2,.2,.2, 0);	
-	plate(-1,1,-2.5,				.2,.2,.2, 0);	
+	plate(-1,footage[printIndex][1]+3,-2.5,.2,.2,.2, 0);	
+	//plate(-1,1,-2.5,				.2,.2,.2, 0);	
 	
   	spool(3,4,-4.5,		1,1,1, 0);
 
@@ -977,6 +977,7 @@ void idle()
    //  Elapsed time in seconds
 	double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
 	// header movement
+	int i = 0;
 
 	zh = fmod(90*t,360.0);
 
@@ -1029,7 +1030,9 @@ void idle()
 	}
 	if (period > 2*PI){
 		period -= 2*PI;
-		footD += .07;
+		//footD += .07;
+		for(i=0; i<printIndex; i++)
+			footage[i][1] -= .07;
 	}
 	glutPostRedisplay();
 }

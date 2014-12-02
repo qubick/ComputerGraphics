@@ -15,7 +15,7 @@ int time=0;
 int ball_mode = 0;
 
 //material pritning values
-double baseHeight = 3;
+double baseHeight = 4;
 double headerX = 0;
 double headerY = 0;
 
@@ -953,7 +953,7 @@ void display()
 	desk(-7,-1,-5,	2,1,2, 0);
 	box(-3,0,3,              .2,.2,.2, 0);
 	lcdPanel(2.6,.8,3.1, .8,.8,.8, 0);	
-	plate(-1,footage[printIndex][1]+3,-2.5,.2,.2,.2, 0);	
+	plate(-1,baseHeight,-2.5,.2,.2,.2, 0);	
 	//plate(-1,1,-2.5,				.2,.2,.2, 0);	
 	
   	spool(3,4,-4.5,		1,1,1, 0);
@@ -982,8 +982,9 @@ void idle()
 	zh = fmod(90*t,360.0);
 
    //  Tell GLUT it is necessary to redisplay the scene
-	if (baseHeight>0)
-		baseHeight = baseHeight-abs(t*0.3)*0.1;
+//	if (baseHeight>0)
+//		baseHeight = baseHeight-abs(t*0.3)*0.1;
+
 	headerX = sin(t*0.5)+1;
 
 
@@ -991,41 +992,41 @@ void idle()
 		footW = sin(period);
 			if (printIndex<FOOTAGE){
 				footage[printIndex][0] = footW;
-				footage[printIndex][1] = footD+2;
+				footage[printIndex][1] = footD+.5;
 				footage[printIndex][2] = footH;
 			}
-			period += 0.08;
+			period += 0.1;
 			footW = footage[printIndex++][0]; //last x
 		}
 	else if(sin(period)>=0 && cos(period)<=0){
 			footH = sin(period-PI/2);
 			if (printIndex<FOOTAGE){
 				footage[printIndex][0] = footW;
-				footage[printIndex][1] = footD+2;
+				footage[printIndex][1] = footD+.5;
 				footage[printIndex][2] = footH;
 
 			}
-			period += 0.08;
+			period += 0.1;
 			footH = footage[printIndex++][2]; //last y
 		}	
 	else if(sin(period)<=0 && cos(period)<=0){
 			footW = sin(period-PI/2);
 			if (printIndex<FOOTAGE){
 				footage[printIndex][0] = footW;
-				footage[printIndex][1] = footD+2;
+				footage[printIndex][1] = footD+.5;
 				footage[printIndex][2] = footH;
 			}
-			period += 0.08;
+			period += 0.1;
 			footW = footage[printIndex++][0]; //last x
 		}	
 	else if(sin(period)<=0 && cos(period)>=0){
 			footH = sin(period-PI);
 			if (printIndex<FOOTAGE){
 				footage[printIndex][0] = footW;
-				footage[printIndex][1] = footD+2;
+				footage[printIndex][1] = footD+.5;
 				footage[printIndex][2] = footH;
 			}
-			period += 0.08;
+			period += 0.1;
 			footH = footage[printIndex++][2]; //last y
 	}
 	if (period > 2*PI){
@@ -1033,6 +1034,8 @@ void idle()
 		//footD += .07;
 		for(i=0; i<printIndex; i++)
 			footage[i][1] -= .07;
+		if (baseHeight>0)
+			baseHeight -= .07;
 	}
 	glutPostRedisplay();
 }

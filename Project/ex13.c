@@ -143,9 +143,9 @@ static void cylinder(double x, double y, double z,
 	//front
 	glBegin(GL_QUAD_STRIP);
 		for(i=0; i<=360; i+=DEF_D){
-			glColor3f(1,1,0);
+			glColor3f(.8,.8,.8); //dark grey
 			glVertex3f(Cos(i), +1, Sin(i));
-			glColor3f(0,1,0);
+			glColor3f(.2,.2,.2); //light grey
 			glVertex3f(Cos(i), -1, Sin(i));
 		}
 	glEnd();
@@ -952,7 +952,7 @@ void display()
 
 	desk(-7,-1,-5,	2,1,2, 0);
 	box(-3,0,3,              .2,.2,.2, 0);
-	lcdPanel(2.6,.8,3.1, .8,.8,.8, 0);	
+	lcdPanel(2.5,.8,3.1, .8,.8,.8, 0);	
 	plate(-1,baseHeight,-2.5,.2,.2,.2, 0);	
 	//plate(-1,1,-2.5,				.2,.2,.2, 0);	
 	

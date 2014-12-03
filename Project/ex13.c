@@ -80,7 +80,7 @@ void sleep(int time){
 void setup(){
 	//texture setup
 	texture[0] = LoadTexBMP("wood.bmp");
-	texture[1] = LoadTexBMP("water.bmp");	
+	//texture[1] = LoadTexBMP("water.bmp");	
 	//spool color setup
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	//white
@@ -956,9 +956,11 @@ void display()
 	plate(-1,baseHeight,-2.5,.2,.2,.2, 0);	
 	//plate(-1,1,-2.5,				.2,.2,.2, 0);	
 	
-  	spool(3,4,-4.5,		1,1,1, 0);
+	header(headerX,5,headerY, .2,.2,.2, 0);
+//printf("headerX: %f, \t headerY: %f \n", headerX, headerY);
 
-	//header(headerX*3-3,5,0, .2,.2,.2, 0);
+	spool(3,4,-4.5,		1,1,1, 0);
+
 	
 	
 	for (i=0; i<FOOTAGE; i++){
@@ -980,13 +982,6 @@ void idle()
 	int i = 0;
 
 	zh = fmod(90*t,360.0);
-
-   //  Tell GLUT it is necessary to redisplay the scene
-//	if (baseHeight>0)
-//		baseHeight = baseHeight-abs(t*0.3)*0.1;
-
-	headerX = sin(t*0.5)+1;
-
 
 	if(sin(period)>=0 && cos(period)>=0){
 		footW = sin(period);
@@ -1037,6 +1032,9 @@ void idle()
 		if (baseHeight>0)
 			baseHeight -= .07;
 	}
+	headerX = footage[printIndex-1][0];
+	headerY = footage[printIndex-1][2];
+
 	glutPostRedisplay();
 }
 

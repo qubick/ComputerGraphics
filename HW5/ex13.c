@@ -89,6 +89,7 @@ static void street()
 		glEnd();
 
 }
+#if 0
 static void taxi(double x,double y,double z,
                  double dx,double dy,double dz,
 					  double th)
@@ -166,7 +167,7 @@ static void taxi(double x,double y,double z,
 
 	//  left_window
 	glColor3f(1,1,0); //yellow
-		glNormal3f(-0.6,0.8,0);
+		glNormal3f(-0.75,0.8,0);
 	glVertex3f(1.5,1,0);
 	glVertex3f(1.5,1,-4);
 	glVertex3f(4,3,-4);
@@ -281,7 +282,7 @@ static void taxi(double x,double y,double z,
 	//  Undo transformations
 	glPopMatrix();
 }
-
+#endif
 
 static void truck(double x,double y,double z,
                  double dx,double dy,double dz,
@@ -310,7 +311,7 @@ static void truck(double x,double y,double z,
 		glVertex3f(10,4, 0);
 		glVertex3f(4,4,0);
 		glVertex3f(2,2,0);
-		glVertex3f(0,1,0);
+		glVertex3f(0,2,0);
 	glEnd();
 
 	//back
@@ -322,7 +323,7 @@ static void truck(double x,double y,double z,
 		glVertex3f(10,4, -4);
 		glVertex3f(4,4,-4);
 		glVertex3f(2,2,-4);
-		glVertex3f(0,1,-4);
+		glVertex3f(0,2,-4);
 	glEnd();
 
 	glBegin(GL_QUADS);
@@ -340,14 +341,14 @@ static void truck(double x,double y,double z,
 		glNormal3f(-1,0,0);
 		glVertex3f(0, 0, 0);
 		glVertex3f(0,0,-4);
-		glVertex3f(0,1,-4);
-		glVertex3f(0,1,0);
+		glVertex3f(0,2,-4);
+		glVertex3f(0,2,0);
 
  	 //  bonnet-cover
 	   glColor3f(1,1,0); //yellow
 		glNormal3f(0,1,0);
-	   glVertex3f(0,1,0);
-	   glVertex3f(0,1,-4);
+	   glVertex3f(0,2,0);
+	   glVertex3f(0,2,-4);
 	   glVertex3f(2,2,-4);
 		glVertex3f(2,2,0);
 
@@ -617,15 +618,16 @@ void display()
   // ball(-1,0,-2 , 0.5);
 
 	street();
-   truck(-5+(zh-12)*0.1,.1,1.5,	.15,.15,.15, 180);
-	truck(2-(zh-120)*0.1,.1,.1,    .1,.1,.1, 0);
+   //truck(-5+(zh-12)*0.1,.1,1.5,	.15,.15,.15, 180);
+	//truck(2-(zh-120)*0.1,.1,.1,    .1,.1,.1, 0);
 	
-	taxi(-5+(zh-100)*0.07,.2,1.5, .1,.1,.1, 180);
-	taxi(-(zh-120)*0.15,0,.5,              .1,.1,.1, 0);
+	//taxi(-5+(zh-100)*0.07,.2,1.5, .1,.1,.1, 180);
+	//taxi(-(zh-120)*0.15,0,.5,              .1,.1,.1, 0);
+	//truck(0.5,0.5,0.5,.2,.2,.2,180);
 	
 	sleep(10000);
-	truck(10-(zh-120)*0.15,.1,.5,   .1,.1,.1, 0);
-
+	//truck(10-(zh-120)*0.15,.1,.5,   .1,.1,.1, 0);
+	truck(0,0,.5,.3,.3,.3,0);
    //  Render the scene and make it visible
    ErrCheck("display");
    glFlush();

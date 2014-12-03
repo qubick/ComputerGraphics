@@ -8,7 +8,6 @@ Demonstrates basic lighting upon object (street, truck, and taxi).
 Key bindings
   l          Toggles lighting
   a/A        Decrease/increase ambient light
-  b/B	     Toggle light source rotation axe - horizontal/vertical
   d/D        Decrease/increase diffuse light
   s/S        Decrease/increase specular light
   e/E        Decrease/increase emitted light

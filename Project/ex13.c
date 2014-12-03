@@ -311,26 +311,6 @@ static void desk(double x, double y, double z,
 						double dx, double dy, double dz,
 						double th)
 {
-#if 0
-   float yellow[] = {1.0,1.0,0.0,1.0};
-   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
-	
-	//  Save transformation
-	glPushMatrix();
-	//  Offset
-	glTranslated(x,y,z);
-	glRotated(th,0,1,0);
-	glScaled(dx,dy,dz);
-
-	glEnable(GL_TEXTURE_2D);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
-
-   //glColor3f(1,1,0); //yellow
-   glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
-   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
-   glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
-#endif
 
 	float white[] = {1,1,1,1};
 	float Emission[] = {0,0,0.01*emission, 1.0};
@@ -361,34 +341,34 @@ static void desk(double x, double y, double z,
 		glTexCoord2f(1,0);	glVertex3f(0,0,7);
 		//bottom
 		glNormal3f(0,-1,0);
-		glVertex3f(0,-1,0);
-		glVertex3f(10,-1,0);
-		glVertex3f(10,-1,7);
-		glVertex3f(0,-1,7);
+		glTexCoord2f(0,0); glVertex3f(0,-1,0);
+		glTexCoord2f(0,1); glVertex3f(10,-1,0);
+		glTexCoord2f(1,1); glVertex3f(10,-1,7);
+		glTexCoord2f(1,0); glVertex3f(0,-1,7);
 		//back
 		glNormal3f(0,0,-1);
-		glVertex3f(0,0,0);
-		glVertex3f(0,-1,0);
-		glVertex3f(10,-1,0);
-		glVertex3f(10,0,0);
+		glTexCoord2f(0,0); glVertex3f(0,0,0);
+		glTexCoord2f(0,1); glVertex3f(0,-1,0);
+		glTexCoord2f(1,1); glVertex3f(10,-1,0);
+		glTexCoord2f(1,0); glVertex3f(10,0,0);
 		//front
 		glNormal3f(0,0,1);
-		glVertex3f(0,0,7);
-		glVertex3f(0,-1,7);
-		glVertex3f(10,-1,7);
-		glVertex3f(10,0,7);
+		glTexCoord2f(0,0); glVertex3f(0,0,7);
+		glTexCoord2f(0,1); glVertex3f(0,-1,7);
+		glTexCoord2f(1,1); glVertex3f(10,-1,7);
+		glTexCoord2f(1,0); glVertex3f(10,0,7);
 		//left
 		glNormal3f(-1,0,0);
-		glVertex3f(0,0,0);
-		glVertex3f(0,-1,0);
-		glVertex3f(0,-1,7);
-		glVertex3f(0,0,7);
+		glTexCoord2f(0,0); glVertex3f(0,0,0);
+		glTexCoord2f(0,1); glVertex3f(0,-1,0);
+		glTexCoord2f(1,1); glVertex3f(0,-1,7);
+		glTexCoord2f(1,0); glVertex3f(0,0,7);
 		//right
 		glNormal3f(1,0,0);
-		glVertex3f(10,0,0);
-		glVertex3f(10,-1,0);
-		glVertex3f(10,-1,7);
-		glVertex3f(10,0,7);
+		glTexCoord2f(0,0); glVertex3f(10,0,0);
+		glTexCoord2f(0,1); glVertex3f(10,-1,0);
+		glTexCoord2f(1,1); glVertex3f(10,-1,7);
+		glTexCoord2f(1,0); glVertex3f(10,0,7);
 	glEnd();
 	
 	glPopMatrix();

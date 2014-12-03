@@ -459,16 +459,16 @@ static void headerBar(double x,double y,double z,
 	//left
 		//front
 		glNormal3f(0,0,1);
-		glVertex3f(-20,0,0);
+		glVertex3f(-20+offset,0,0);
 		glVertex3f(-18.5,0,0);
 		glVertex3f(-18.5,3,0);
-		glVertex3f(-20,3,0);
+		glVertex3f(-20+offset,3,0);
 		//left
 		glNormal3f(-1,0,0);
-		glVertex3f(-20,0,0);
-		glVertex3f(-20,0,-4);
-		glVertex3f(-20,3,-4);
-		glVertex3f(-20,3,0);
+		glVertex3f(-20+offset,0,0);
+		glVertex3f(-20+offset,0,-4);
+		glVertex3f(-20+offset,3,-4);
+		glVertex3f(-20+offset,3,0);
 		//right
 		glNormal3f(1,0,0);
 		glVertex3f(-18.5,0,0);
@@ -477,39 +477,39 @@ static void headerBar(double x,double y,double z,
 		glVertex3f(-18.5,3,0);
 		//back
 		glNormal3f(0,0,-1);
-		glVertex3f(-20,0,-4);
+		glVertex3f(-20+offset,0,-4);
 		glVertex3f(-18.5,0,-4);
 		glVertex3f(-18.5,3,-4);
-		glVertex3f(-20,3,-4);
+		glVertex3f(-20+offset,3,-4);
 		//bottom
 		glColor3f(1,0,0);
 		glNormal3f(0,-1,0);
-		glVertex3f(-20,0,0);
+		glVertex3f(-20+offset,0,0);
 		glVertex3f(-18.5,0,0);
 		glVertex3f(-18.5,0,-4);
-		glVertex3f(-20,0,-4);
+		glVertex3f(-20+offset,0,-4);
 		//top
 		glColor3f(1,0,0);
 		glNormal3f(0,1,0);
-		glVertex3f(-20,3,0);
+		glVertex3f(-20+offset,3,0);
 		glVertex3f(-18.5,3,0);
 		glVertex3f(-18.5,3,-4);
-		glVertex3f(-20,3,-4);
+		glVertex3f(-20+offset,3,-4);
 
 	//right
    glColor3f(1,1,1);
 		//front
 		glNormal3f(0,0,1);
-		glVertex3f(20,0,0);
+		glVertex3f(20-offset,0,0);
 		glVertex3f(18.5,0,0);
 		glVertex3f(18.5,3,0);
-		glVertex3f(20,3,0);
+		glVertex3f(20-offset,3,0);
 		//left
 		glNormal3f(-1,0,0);
-		glVertex3f(20,0,0);
-		glVertex3f(20,0,-4);
-		glVertex3f(20,3,-4);
-		glVertex3f(20,3,0);
+		glVertex3f(20-offset,0,0);
+		glVertex3f(20-offset,0,-4);
+		glVertex3f(20-offset,3,-4);
+		glVertex3f(20-offset,3,0);
 		//right
 		glNormal3f(1,0,0);
 		glVertex3f(18.5,0,0);
@@ -518,24 +518,24 @@ static void headerBar(double x,double y,double z,
 		glVertex3f(18.5,3,0);
 		//back
 		glNormal3f(0,0,-1);
-		glVertex3f(20,0,-4);
+		glVertex3f(20-offset,0,-4);
 		glVertex3f(18.5,0,-4);
 		glVertex3f(18.5,3,-4);
-		glVertex3f(20,3,-4);
+		glVertex3f(20-offset,3,-4);
 		//bottom
 		glColor3f(1,0,0);
 		glNormal3f(0,-1,0);
-		glVertex3f(20,0,0);
+		glVertex3f(20-offset,0,0);
 		glVertex3f(18.5,0,0);
 		glVertex3f(18.5,0,-4);
-		glVertex3f(20,0,-4);
+		glVertex3f(20-offset,0,-4);
 		//top
 		glColor3f(1,0,0);
 		glNormal3f(0,1,0);
-		glVertex3f(20,3,0);
+		glVertex3f(20-offset,3,0);
 		glVertex3f(18.5,3,0);
 		glVertex3f(18.5,3,-4);
-		glVertex3f(20,3,-4);
+		glVertex3f(20-offset,3,-4);
 
 	glEnd();
 	glPopMatrix();
@@ -722,7 +722,7 @@ static void plate(double x,double y,double z,
 
 	printBase(-7,2.5,1.5, 3.5,1.5,3, 0);
 	
-	glColor3f(1,1,1);
+	glColor3f(0.2,0.2,0.2);
 	//****************  vertical logo bar ******************//
 	//front
 	glBegin(GL_POLYGON);
@@ -811,7 +811,7 @@ static void plate(double x,double y,double z,
 		glVertex3f(18,10,-.5);
 	glEnd();
 
-	//**************** printing plate holder*********************//
+	//**************** printing plate holder ***************//
 	glBegin(GL_QUADS);
 		//bidge-front
 		//front
@@ -821,13 +821,13 @@ static void plate(double x,double y,double z,
 		glVertex3f(18,1,25);
 		glVertex3f(2,1,25);
 		//slide
-		glNormal3f(0,0,1);
+		glNormal3f(0,0.3,0.7);
 		glVertex3f(2,1,25);
 		glVertex3f(18,1,25);
 		glVertex3f(18,2,23);
 		glVertex3f(2,2,23);
 		//back
-		glNormal3f(0,0,1);
+		glNormal3f(0,0,-1);
 		glVertex3f(2,0,23);
 		glVertex3f(18,0,23);
 		glVertex3f(18,2,23);

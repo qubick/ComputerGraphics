@@ -72,6 +72,8 @@ float shinyvec[1];    // Shininess (value)
 int lzh        =  90;  // Light azimuth
 float ylight  =   5;  // Elevation of light
 
+int obj[5]; //.obj lists
+
 void sleep(int time){
 	int i,j = 0;
 	for(i=0; i<time; i++){
@@ -80,9 +82,6 @@ void sleep(int time){
 }
 
 void setup(){
-	//texture setup
-	//texture[0] = LoadTexBMP("wood.bmp");
-	//texture[1] = LoadTexBMP("water.bmp");	
 	
 	//spool color setup
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -128,6 +127,24 @@ void setup(){
 }
 
 
+static void loadObjects(double x, double y, double z,
+						double dx, double dy, double dz,
+						double rx, double ry, double rz,
+						int i)
+{
+
+	glPushMatrix();
+	glTranslated(x,y,z);
+	glRotated(rx,1,0,0);
+	glRotated(ry,0,1,0);
+	glRotated(rz,0,0,1);
+	glScaled(dx, dy, dz);
+
+	glCallList(obj[i]); //draw "i"th .obj objects
+
+	glPopMatrix();
+}
+
 static void cylinder(double x, double y, double z,
 						double dx, double dy, double dz,
 						double rx, double ry, double rz)
@@ -164,7 +181,7 @@ static void spool(double x, double y, double z,
 
 	glPushMatrix();
 	glTranslated(x,y,z);
-	glRotated(th,0,0,1);
+	glRotated(th,0,0,1); //rotate regulaly
 	glScaled(dx, dy, dz);
 
 	glColor3f(1,0,0); //spool rack
@@ -1096,6 +1113,10 @@ void display()
         glLightfv(GL_LIGHT0,GL_DIFFUSE ,Diffuse);
         glLightfv(GL_LIGHT0,GL_SPECULAR,Specular);
         glLightfv(GL_LIGHT0,GL_POSITION,Position);
+		 
+		 //for (i=0; i<5; i++)
+		  	loadObjects(0,0,5, .7,.7,.7, 0,0,0, 0); //suzanne
+			loadObjects(5,0,7, .8,.8,.8, 0,180,0, 1); //armadillo
    }
    else
      glDisable(GL_LIGHTING);
@@ -1347,7 +1368,10 @@ int main(int argc,char* argv[])
 	texture[0] = LoadTexBMP("wood.bmp");
 	texture[1] = LoadTexBMP("logolong.bmp");
 	texture[2] = LoadTexBMP("logocircle.bmp");
-	
+
+	obj[0] = LoadOBJ("suzanne.obj");
+	obj[1] = LoadOBJ("armadillo.obj");
+
 	//  Pass control to GLUT so it can interact with the user
    ErrCheck("init");
    glutMainLoop();

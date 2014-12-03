@@ -14,6 +14,7 @@ int view = 0;
 int time=0;
 int ball_mode = 0;
 int alpha = 100;
+int tr = 0;	//spool rotation
 
 //material pritning values
 double baseHeight = 4;
@@ -163,7 +164,7 @@ static void spool(double x, double y, double z,
 
 	glPushMatrix();
 	glTranslated(x,y,z);
-	glRotated(th,0,1,0);
+	glRotated(th,0,0,1);
 	glScaled(dx, dy, dz);
 
 	glColor3f(1,0,0); //spool rack
@@ -724,12 +725,19 @@ static void plate(double x,double y,double z,
 	glTranslated(x,y,z);
 	glRotated(th,0,1,0);
 	glScaled(dx,dy,dz);
-
-	printBase(-7,2.5,1.5, 3.5,1.5,3, 0);
 	
-	glColor3f(0.2,0.2,0.2);
+	printBase(-7,2.5,1.5, 3.5,1.5,3, 0);
+
+#if 0	
+	//enable texture
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mode?GL_REPLACE:GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, texture[2]); //logo circle
+#endif
+	glColor3f(0.7,0.7,0.7);
+	
 	//****************  vertical logo bar ******************//
-	//front
+	//back
 	glBegin(GL_POLYGON);
 		glNormal3f(0,0,1);
 		glVertex3f(2,0,0);
@@ -750,14 +758,18 @@ static void plate(double x,double y,double z,
 		glNormal3f(0,0,1);
 		glVertex3f(2,0,1);
 		glVertex3f(4,0,1);
-		glVertex3f(5,1,1);
-		glVertex3f(15,1,1);
+		//glTexCoord2f(0,0); 
+			glVertex3f(5,1,1);
+		//glTexCoord2f(1,0); 
+			glVertex3f(15,1,1);
 		glVertex3f(16,0,1);
 		glVertex3f(18,0,1);
 		glVertex3f(18,10,1);
 		glVertex3f(16,10,1);
-		glVertex3f(15,9,1);
-		glVertex3f(5,9,1);
+		//glTexCoord2f(1,1); 
+			glVertex3f(15,9,1);
+		//glTexCoord2f(1,0); 
+			glVertex3f(5,9,1);
 		glVertex3f(4,10,1);
 		glVertex3f(2,10,1);
 	glEnd();
@@ -825,12 +837,16 @@ static void plate(double x,double y,double z,
 		glVertex3f(18,0,25);
 		glVertex3f(18,1,25);
 		glVertex3f(2,1,25);
+	//enable texture
+
+	//glBindTexture(GL_TEXTURE_2D, texture[1]); //logo long
 		//slide
 		glNormal3f(0,0.3,0.7);
-		glVertex3f(2,1,25);
-		glVertex3f(18,1,25);
-		glVertex3f(18,2,23);
-		glVertex3f(2,2,23);
+		glTexCoord2f(0,0); glVertex3f(2,1,25);
+		glTexCoord2f(0,1); glVertex3f(18,1,25);
+		glTexCoord2f(1,1); glVertex3f(18,2,23);
+		glTexCoord2f(1,0); glVertex3f(2,2,23);
+
 		//back
 		glNormal3f(0,0,-1);
 		glVertex3f(2,0,23);
@@ -922,6 +938,7 @@ static void plate(double x,double y,double z,
 	glEnd();
 	//  Undo transformation
 	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
 
 }
 
@@ -1047,12 +1064,17 @@ void display()
    if (light)
    {
         //  Translate intensity to color vectors
-        float Ambient[]   = {0.01*ambient ,0.01*ambient ,0.01*ambient ,1.0};
-        float Diffuse[]   = {0.01*diffuse ,0.01*diffuse ,0.01*diffuse ,1.0};
-        float Specular[]  = {0.01*specular,0.01*specular,0.01*specular,1.0};
+        float Ambient[]   
+		  		= {0.01*ambient ,0.01*ambient ,0.01*ambient ,1.0};
+        float Diffuse[]   
+		  		= {0.01*diffuse ,0.01*diffuse ,0.01*diffuse ,1.0};
+        float Specular[]  
+		  		= {0.01*specular,0.01*specular,0.01*specular,1.0};
         //  Light position
-        float Position[]  = {distance*Cos(zh),ylight,distance*Sin(zh),1.0};
-        //  Draw light position as ball (still no lighting here)
+        float Position[]  
+		  		= {distance*Cos(zh),ylight,distance*Sin(zh),1.0};
+        
+		  //  Draw light position as ball (still no lighting here)
         glColor3f(1,1,1);
 			if(ball_mode == 0)
 				ball(Position[0],Position[1],Position[2]+1 , 0.1);
@@ -1083,8 +1105,9 @@ void display()
 	//outer box - stationary
 	box(-3,0,3,              .2,.2,.2, 0);
 		lcdPanel(2.5,.8,3.1, .8,.8,.8, 0);	
+	
 	//spool - rotate
-	spool(3,4,-4.5,		1,1,1, 0);
+	spool(3,4,-4.5,		1,1,1, zh);
 	
 	//plate - up&down
 	plate(-1,baseHeight,-2.5,.2,.2,.2, 0);	
@@ -1122,7 +1145,7 @@ void idle()
 				footage[printIndex][1] = footD+.5;
 				footage[printIndex][2] = footH;
 			}
-			period += 0.1;
+			period += 0.11;
 			footW = footage[printIndex++][0]; //last x
 		}
 	else if(sin(period)>=0 && cos(period)<=0){
@@ -1133,7 +1156,7 @@ void idle()
 				footage[printIndex][2] = footH;
 
 			}
-			period += 0.1;
+			period += 0.11;
 			footH = footage[printIndex++][2]; //last y
 		}	
 	else if(sin(period)<=0 && cos(period)<=0){
@@ -1143,7 +1166,7 @@ void idle()
 				footage[printIndex][1] = footD+.5;
 				footage[printIndex][2] = footH;
 			}
-			period += 0.1;
+			period += 0.11;
 			footW = footage[printIndex++][0]; //last x
 		}	
 	else if(sin(period)<=0 && cos(period)>=0){
@@ -1153,16 +1176,15 @@ void idle()
 				footage[printIndex][1] = footD+.5;
 				footage[printIndex][2] = footH;
 			}
-			period += 0.1;
+			period += 0.11;
 			footH = footage[printIndex++][2]; //last y
 	}
 	if (period > 2*PI){
 		period -= 2*PI;
-		//footD += .07;
 		for(i=0; i<printIndex; i++)
-			footage[i][1] -= .07;
+			footage[i][1] -= .075;
 		if (baseHeight>0)
-			baseHeight -= .07;
+			baseHeight -= .08;
 	}
 	headerX = footage[printIndex-1][0];
 	headerY = footage[printIndex-1][2];
@@ -1323,6 +1345,9 @@ int main(int argc,char* argv[])
    glutIdleFunc(idle);
    
 	texture[0] = LoadTexBMP("wood.bmp");
+	texture[1] = LoadTexBMP("logolong.bmp");
+	texture[2] = LoadTexBMP("logocircle.bmp");
+	
 	//  Pass control to GLUT so it can interact with the user
    ErrCheck("init");
    glutMainLoop();

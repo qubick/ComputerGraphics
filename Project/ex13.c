@@ -13,6 +13,7 @@ double dim=7.0;   //  Size of world
 int view = 0;
 int time=0;
 int ball_mode = 0;
+int alpha = 100;
 
 //material pritning values
 double baseHeight = 4;
@@ -79,7 +80,7 @@ void sleep(int time){
 
 void setup(){
 	//texture setup
-	texture[0] = LoadTexBMP("wood.bmp");
+	//texture[0] = LoadTexBMP("wood.bmp");
 	//texture[1] = LoadTexBMP("water.bmp");	
 	
 	//spool color setup
@@ -259,8 +260,11 @@ static void printBase(double x, double y, double z,
    glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
    glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glColor4f(1,1,1, 0.01*alpha);
+	
 	glBegin(GL_QUADS);
-	glColor3f(0,0,1);
 		//top
 		glNormal3f(0,1,0);
 		glVertex3f(0,0,0);
@@ -300,13 +304,14 @@ static void printBase(double x, double y, double z,
 	glEnd();
 	glPopMatrix();
 
+	glDisable(GL_BLEND);
 }
 
 static void desk(double x, double y, double z,
 						double dx, double dy, double dz,
 						double th)
 {
-
+#if 0
    float yellow[] = {1.0,1.0,0.0,1.0};
    float Emission[]  = {0.0,0.0,0.01*emission,1.0};
 	
@@ -319,21 +324,41 @@ static void desk(double x, double y, double z,
 
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glBindTexture(GL_TEXTURE_2D, texture[1]);
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
 
    //glColor3f(1,1,0); //yellow
    glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
    glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
    glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
+#endif
 
+	float white[] = {1,1,1,1};
+	float Emission[] = {0,0,0.01*emission, 1.0};
+	
+   glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
+   glMaterialfv(GL_FRONT,GL_SPECULAR,white);
+   glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
+
+	//  Save transformation
+	glPushMatrix();
+	//  Offset
+	glTranslated(x,y,z);
+	glRotated(th,0,1,0);
+	glScaled(dx,dy,dz);
+
+	//  Enable textures
+   glEnable(GL_TEXTURE_2D);
+	glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,mode?GL_REPLACE:GL_MODULATE);
+	glColor4f(1,1,1,0.01*alpha);
+	glBindTexture(GL_TEXTURE_2D,texture[0]);
 	glBegin(GL_QUADS);
 	//************************ table top **************//
 		//top
 		glNormal3f(0,1,0);
-		glTexCoord2f(0.0, 0.0);	glVertex3f(0,0,0);
-		glTexCoord2f(0.0, rep); glVertex3f(10,0,0);
-		glTexCoord2f(rep, rep);	glVertex3f(10,0,7);
-		glTexCoord2f(rep, 0.0);	glVertex3f(0,0,7);
+		glTexCoord2f(0,0);	glVertex3f(0,0,0);
+		glTexCoord2f(0,1); 	glVertex3f(10,0,0);
+		glTexCoord2f(1,1);	glVertex3f(10,0,7);
+		glTexCoord2f(1,0);	glVertex3f(0,0,7);
 		//bottom
 		glNormal3f(0,-1,0);
 		glVertex3f(0,-1,0);
@@ -365,9 +390,9 @@ static void desk(double x, double y, double z,
 		glVertex3f(10,-1,7);
 		glVertex3f(10,0,7);
 	glEnd();
-	glDisable(GL_TEXTURE_2D);
+	
 	glPopMatrix();
-
+	glDisable(GL_TEXTURE_2D);
 }
 
 static void header(double x,double y,double z,
@@ -1309,7 +1334,7 @@ int main(int argc,char* argv[])
    //glClearColor(1,1,1,1);
 	//glColor3f(1.0f, 1.0f, 1.0f);
 	glutInitWindowSize(600,600);
-   glutCreateWindow("HW5_JeeeunKim_Lighting");
+   glutCreateWindow("JeeeunKim_MakerBot Simluator");
    //  Set callbacks
    glutDisplayFunc(display);
    glutReshapeFunc(reshape);
@@ -1317,6 +1342,7 @@ int main(int argc,char* argv[])
    glutKeyboardFunc(key);
    glutIdleFunc(idle);
    
+	texture[0] = LoadTexBMP("wood.bmp");
 	//  Pass control to GLUT so it can interact with the user
    ErrCheck("init");
    glutMainLoop();

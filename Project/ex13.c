@@ -81,6 +81,7 @@ void setup(){
 	//texture setup
 	texture[0] = LoadTexBMP("wood.bmp");
 	//texture[1] = LoadTexBMP("water.bmp");	
+	
 	//spool color setup
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	//white
@@ -127,7 +128,7 @@ void setup(){
 
 static void cylinder(double x, double y, double z,
 						double dx, double dy, double dz,
-						double rx, double ry)
+						double rx, double ry, double rz)
 {
 
 	double i = 0.0;
@@ -136,6 +137,7 @@ static void cylinder(double x, double y, double z,
 	glTranslated(x,y,z);
 	glRotated(rx,1,0,0);
 	glRotated(ry,0,1,0);
+	glRotated(rz,0,0,1);
 	glScaled(dx, dy, dz);
 
 	glColor3f(1,1,1); //spool rack
@@ -166,7 +168,7 @@ static void spool(double x, double y, double z,
 	glColor3f(1,0,0); //spool rack
 
 	//back
-	cylinder(0,0,0, 1.2,.05,1.2,	90,0);
+	cylinder(0,0,0, 1.2,.05,1.2,	90,0,0);
 	
 	glBegin(GL_POLYGON);
 	for(i=0; i<2*PI; i+= PI/12){
@@ -183,7 +185,7 @@ static void spool(double x, double y, double z,
 	//the block hole in the middle?
 
 	//front - close to the box
-	cylinder(0,0,1, 1.2,.05,1.2,	90,0);
+	cylinder(0,0,1, 1.2,.05,1.2,	90,0,0);
 
 	glBegin(GL_POLYGON);
 	for(i=0; i<2*PI; i+= PI/12){
@@ -198,10 +200,10 @@ static void spool(double x, double y, double z,
 	glEnd();
 
 	//axe
-	cylinder(0,0,.5, .8,.5,.8,	90,0);
+	cylinder(0,0,.5, .8,.5,.8,	90,0,0);
 
 	//connector to the box
-	cylinder(0,0,1, .5,.5,.5,	90,0);
+	cylinder(0,0,1, .5,.5,.5,	90,0,0);
 
 	glPopMatrix();
 }
@@ -387,38 +389,92 @@ static void header(double x,double y,double z,
    glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
    glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
 
+
+	//************** print header ****************//
 	glBegin(GL_QUADS);
 		//front
 		glNormal3f(0,0,1);
 		glVertex3f(0,0,0);
-		glVertex3f(5,0,0);
-		glVertex3f(5,3,0);
+		glVertex3f(4,0,0);
+		glVertex3f(4,3,0);
 		glVertex3f(0,3,0);
 		//left
 		glNormal3f(-1,0,0);
 		glVertex3f(0,0,0);
-		glVertex3f(0,0,-5);
-		glVertex3f(0,3,-5);
+		glVertex3f(0,0,-4);
+		glVertex3f(0,3,-4);
 		glVertex3f(0,3,0);
 		//right
 		glNormal3f(1,0,0);
-		glVertex3f(5,0,0);
-		glVertex3f(5,0,-5);
-		glVertex3f(5,3,-5);
-		glVertex3f(5,3,0);
+		glVertex3f(4,0,0);
+		glVertex3f(4,0,-4);
+		glVertex3f(4,3,-4);
+		glVertex3f(4,3,0);
 		//back
 		glNormal3f(0,0,-1);
-		glVertex3f(0,0,-5);
-		glVertex3f(5,0,-5);
-		glVertex3f(5,3,-5);
-		glVertex3f(0,3,-5);
+		glVertex3f(0,0,-4);
+		glVertex3f(4,0,-4);
+		glVertex3f(4,3,-4);
+		glVertex3f(0,3,-4);
 		//bottom
 		glColor3f(1,0,0);
 		glNormal3f(0,-1,0);
 		glVertex3f(0,0,0);
-		glVertex3f(5,0,0);
-		glVertex3f(5,0,-5);
-		glVertex3f(0,0,-5);
+		glVertex3f(4,0,0);
+		glVertex3f(4,0,-4);
+		glVertex3f(0,0,-4);
+		//top
+		glColor3f(1,0,0);
+		glNormal3f(0,1,0);
+		glVertex3f(0,3,0);
+		glVertex3f(4,3,0);
+		glVertex3f(4,3,-4);
+		glVertex3f(0,3,-4);
+
+	//************** side bar holder ****************//
+	//left
+		//front
+		glNormal3f(0,0,1);
+		glVertex3f(0,0,0);
+		glVertex3f(1,0,0);
+		glVertex3f(1,3,0);
+		glVertex3f(0,3,0);
+		//left
+		glNormal3f(-1,0,0);
+		glVertex3f(0,0,0);
+		glVertex3f(0,0,-4);
+		glVertex3f(0,3,-4);
+		glVertex3f(0,3,0);
+		//right
+		glNormal3f(1,0,0);
+		glVertex3f(1,0,0);
+		glVertex3f(1,0,-4);
+		glVertex3f(1,3,-4);
+		glVertex3f(1,3,0);
+		//back
+		glNormal3f(0,0,-1);
+		glVertex3f(0,0,-4);
+		glVertex3f(1,0,-4);
+		glVertex3f(1,3,-4);
+		glVertex3f(0,3,-4);
+		//bottom
+		glColor3f(1,0,0);
+		glNormal3f(0,-1,0);
+		glVertex3f(0,0,0);
+		glVertex3f(1,0,0);
+		glVertex3f(1,0,-4);
+		glVertex3f(0,0,-4);
+		//top
+		glColor3f(1,0,0);
+		glNormal3f(0,1,0);
+		glVertex3f(0,3,0);
+		glVertex3f(1,3,0);
+		glVertex3f(1,3,-4);
+		glVertex3f(0,3,-4);
+
+	//************** side bar holder ****************//
+
+		
 	glEnd();
 	glPopMatrix();
 }
@@ -578,9 +634,9 @@ static void box(double x,double y,double z,
 	//  Undo transformations
 	
 	//left cylinder
-	cylinder(11,15,-27, .7,15,.7,	0,90);
+	cylinder(11,15,-27, .7,15,.7,	0,90,0);
 	//right cylinder
-	cylinder(29,15,-27, .7,15,.7,	0,90);
+	cylinder(29,15,-27, .7,15,.7,	0,90,0);
 	glPopMatrix();
 }
 
@@ -951,17 +1007,21 @@ void display()
      glDisable(GL_LIGHTING);
 
 	desk(-7,-1,-5,	2,1,2, 0);
+
+	//outer box - stationary
 	box(-3,0,3,              .2,.2,.2, 0);
-	lcdPanel(2.5,.8,3.1, .8,.8,.8, 0);	
-	plate(-1,baseHeight,-2.5,.2,.2,.2, 0);	
-	//plate(-1,1,-2.5,				.2,.2,.2, 0);	
-	
-	header(headerX,5,headerY, .2,.2,.2, 0);
-//printf("headerX: %f, \t headerY: %f \n", headerX, headerY);
-
+		lcdPanel(2.5,.8,3.1, .8,.8,.8, 0);	
+	//spool - rotate
 	spool(3,4,-4.5,		1,1,1, 0);
-
 	
+	//plate - up&down
+	plate(-1,baseHeight,-2.5,.2,.2,.2, 0);	
+
+	//header - left&right
+	header(headerX,5,headerY, .2,.2,.2, 0);
+		cylinder(1,5.2,headerY-.1,		.1,4,.1,	90,0,90);// , ,z
+		cylinder(1,5.2,headerY-.7,	.1,4,.1,	90,0,90);
+
 	
 	for (i=0; i<FOOTAGE; i++){
 		droplet(footage[i][0], footage[i][1], footage[i][2], 0.05);

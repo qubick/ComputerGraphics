@@ -431,53 +431,116 @@ static void header(double x,double y,double z,
 		glVertex3f(4,3,-4);
 		glVertex3f(0,3,-4);
 
-	//************** side bar holder ****************//
-	//left
-		//front
-		glNormal3f(0,0,1);
-		glVertex3f(0,0,0);
-		glVertex3f(1,0,0);
-		glVertex3f(1,3,0);
-		glVertex3f(0,3,0);
-		//left
-		glNormal3f(-1,0,0);
-		glVertex3f(0,0,0);
-		glVertex3f(0,0,-4);
-		glVertex3f(0,3,-4);
-		glVertex3f(0,3,0);
-		//right
-		glNormal3f(1,0,0);
-		glVertex3f(1,0,0);
-		glVertex3f(1,0,-4);
-		glVertex3f(1,3,-4);
-		glVertex3f(1,3,0);
-		//back
-		glNormal3f(0,0,-1);
-		glVertex3f(0,0,-4);
-		glVertex3f(1,0,-4);
-		glVertex3f(1,3,-4);
-		glVertex3f(0,3,-4);
-		//bottom
-		glColor3f(1,0,0);
-		glNormal3f(0,-1,0);
-		glVertex3f(0,0,0);
-		glVertex3f(1,0,0);
-		glVertex3f(1,0,-4);
-		glVertex3f(0,0,-4);
-		//top
-		glColor3f(1,0,0);
-		glNormal3f(0,1,0);
-		glVertex3f(0,3,0);
-		glVertex3f(1,3,0);
-		glVertex3f(1,3,-4);
-		glVertex3f(0,3,-4);
-
-	//************** side bar holder ****************//
-
-		
 	glEnd();
 	glPopMatrix();
 }
+static void headerBar(double x,double y,double z,
+                 double dx,double dy, double dz,
+					  double th)
+{
+   float yellow[] = {1.0,1.0,0.0,1.0};
+   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
+	
+	//  Save transformation
+	glPushMatrix();
+	//  Offset
+	glTranslated(x,y,z);
+	glRotated(th,0,1,0);
+	glScaled(dx,dy,dz);
+
+   glColor3f(1,1,1);
+   glMaterialfv(GL_FRONT,GL_SHININESS,shinyvec);
+   glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
+   glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
+
+	//************** side bar holder ****************//
+	glBegin(GL_QUADS);
+
+	//left
+		//front
+		glNormal3f(0,0,1);
+		glVertex3f(-20,0,0);
+		glVertex3f(-18.5,0,0);
+		glVertex3f(-18.5,3,0);
+		glVertex3f(-20,3,0);
+		//left
+		glNormal3f(-1,0,0);
+		glVertex3f(-20,0,0);
+		glVertex3f(-20,0,-4);
+		glVertex3f(-20,3,-4);
+		glVertex3f(-20,3,0);
+		//right
+		glNormal3f(1,0,0);
+		glVertex3f(-18.5,0,0);
+		glVertex3f(-18.5,0,-4);
+		glVertex3f(-18.5,3,-4);
+		glVertex3f(-18.5,3,0);
+		//back
+		glNormal3f(0,0,-1);
+		glVertex3f(-20,0,-4);
+		glVertex3f(-18.5,0,-4);
+		glVertex3f(-18.5,3,-4);
+		glVertex3f(-20,3,-4);
+		//bottom
+		glColor3f(1,0,0);
+		glNormal3f(0,-1,0);
+		glVertex3f(-20,0,0);
+		glVertex3f(-18.5,0,0);
+		glVertex3f(-18.5,0,-4);
+		glVertex3f(-20,0,-4);
+		//top
+		glColor3f(1,0,0);
+		glNormal3f(0,1,0);
+		glVertex3f(-20,3,0);
+		glVertex3f(-18.5,3,0);
+		glVertex3f(-18.5,3,-4);
+		glVertex3f(-20,3,-4);
+
+	//right
+   glColor3f(1,1,1);
+		//front
+		glNormal3f(0,0,1);
+		glVertex3f(20,0,0);
+		glVertex3f(18.5,0,0);
+		glVertex3f(18.5,3,0);
+		glVertex3f(20,3,0);
+		//left
+		glNormal3f(-1,0,0);
+		glVertex3f(20,0,0);
+		glVertex3f(20,0,-4);
+		glVertex3f(20,3,-4);
+		glVertex3f(20,3,0);
+		//right
+		glNormal3f(1,0,0);
+		glVertex3f(18.5,0,0);
+		glVertex3f(18.5,0,-4);
+		glVertex3f(18.5,3,-4);
+		glVertex3f(18.5,3,0);
+		//back
+		glNormal3f(0,0,-1);
+		glVertex3f(20,0,-4);
+		glVertex3f(18.5,0,-4);
+		glVertex3f(18.5,3,-4);
+		glVertex3f(20,3,-4);
+		//bottom
+		glColor3f(1,0,0);
+		glNormal3f(0,-1,0);
+		glVertex3f(20,0,0);
+		glVertex3f(18.5,0,0);
+		glVertex3f(18.5,0,-4);
+		glVertex3f(20,0,-4);
+		//top
+		glColor3f(1,0,0);
+		glNormal3f(0,1,0);
+		glVertex3f(20,3,0);
+		glVertex3f(18.5,3,0);
+		glVertex3f(18.5,3,-4);
+		glVertex3f(20,3,-4);
+
+	glEnd();
+	glPopMatrix();
+}
+
 static void box(double x,double y,double z,
                  double dx,double dy, double dz,
 					  double th)
@@ -498,6 +561,10 @@ static void box(double x,double y,double z,
    glMaterialfv(GL_FRONT,GL_SPECULAR,yellow);
    glMaterialfv(GL_FRONT,GL_EMISSION,Emission);
 
+	//**************** side top bar ****************//
+	cylinder(.8,27.2,-15,		.5,15,.5,	90,0,0);//x,y,z
+	cylinder(39.2,27.2,-15,		.5,15,.5,	90,0,0);
+	
 	//******************** front ****************//
 	glBegin(GL_POLYGON);
 		glNormal3f(0,0,1);
@@ -1017,11 +1084,11 @@ void display()
 	//plate - up&down
 	plate(-1,baseHeight,-2.5,.2,.2,.2, 0);	
 
-	//header - left&right
+	//header - left&right or back&forth
 	header(headerX,5,headerY, .2,.2,.2, 0);
 		cylinder(1,5.2,headerY-.1,		.1,4,.1,	90,0,90);// , ,z
 		cylinder(1,5.2,headerY-.7,	.1,4,.1,	90,0,90);
-
+		headerBar(1,5,headerY, .2,.2,.2, 0);
 	
 	for (i=0; i<FOOTAGE; i++){
 		droplet(footage[i][0], footage[i][1], footage[i][2], 0.05);

@@ -12,6 +12,7 @@ int main(int argc, char *argv[]){
 	
 	char line[128];
 	char *token;
+	char tmp[128];
 	int i = 0;
 	int tokenSize;
 
@@ -23,12 +24,15 @@ int main(int argc, char *argv[]){
 		if(f != NULL){
 			while (fgets (line, sizeof line, f) != NULL){
 				token = strtok(line, " "); //get first command
-	printf("token:%s.", token);
-//				if (token.match(/\bG1\b/)){ //if that cmd includes G1
-{				printf("reached here");
-					token = strtok(NULL, " "); //took x
-						//footage[printIndex][0];
-						printf("%dth line 1st tok %s\n", printIndex, token);
+				if(strspn(token, "G1") == 2){ //it starts with "G1"
+					token = strtok(NULL, " ");
+						if(strspn(token, "X") == 1){ //moving x
+							strcpy(tmp, token);
+							for(i=0; i<strlen(tmp); i++)
+								tmp[i] = tmp[i+1];
+							printf("now tmp is: %s\n", tmp);
+							//footage[printIndex][0];
+							//printf("%dth line 1st tok %s\n", printIndex, token);
 					token = strtok(NULL, " "); //took y
 						//footage[printIndex][2];
 						printf("%dth line 2nd tok%s\n", printIndex, token);
@@ -40,12 +44,12 @@ int main(int argc, char *argv[]){
 							footage[i][1] -= .07; //moves down		
 						}
 #endif
+						}
 						printIndex++;
 					}
 				}
-			
+			fclose(f);
 		}
-		fclose(f);
 	}
 	return 0;
 }

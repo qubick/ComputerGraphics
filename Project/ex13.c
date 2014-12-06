@@ -27,7 +27,7 @@ double headerY = 0;
 #define CUBED	5
 
 //texture
-unsigned int texture[3];
+unsigned int texture[5];
 double rep=10; //repetition
 
 double footage[FOOTAGE][3];
@@ -72,7 +72,7 @@ float shinyvec[1];    // Shininess (value)
 int lzh        =  90;  // Light azimuth
 float ylight  =   5;  // Elevation of light
 
-int obj[5]; //.obj lists
+int obj[10]; //.obj lists
 
 void sleep(int time){
 	int i,j = 0;
@@ -82,7 +82,18 @@ void sleep(int time){
 }
 
 void setup(){
+
+	//  Enable textures
+   glEnable(GL_TEXTURE_2D);
+	glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,mode?GL_REPLACE:GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D,texture[3]);
+	glTexCoord2f(0,0); glVertex3f(0,0,-40);
+	glTexCoord2f(1,0); glVertex3f(40,0,-40);
+	glTexCoord2f(1,1); glVertex3f(40,40,-40);
+	glTexCoord2f(0,1); glVertex3f(0,40,-40);
 	
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_QUADS);
 	//spool color setup
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	//white
@@ -201,8 +212,6 @@ static void spool(double x, double y, double z,
 	}
 	glEnd();
 	
-	//the block hole in the middle?
-
 	//front - close to the box
 	cylinder(0,0,1, 1.2,.05,1.2,	90,0,0);
 
@@ -1114,9 +1123,10 @@ void display()
         glLightfv(GL_LIGHT0,GL_SPECULAR,Specular);
         glLightfv(GL_LIGHT0,GL_POSITION,Position);
 		 
-		  	//loadObjects(0,0,5, .7,.7,.7, 0,0,0, 0); //suzanne
-			//loadObjects(5,0,7, .8,.8,.8, 0,180,0, 1); //armadillo
-   		loadObjects(0,0,0, 10,10,10, 0,0,0, 2);
+		  	loadObjects(0,0,5, .7,.7,.7, 0,0,0, 0); //suzanne
+			loadObjects(5,0,7, .8,.8,.8, 0,180,0, 1); //armadillo
+   		loadObjects(10,0,5, .8,.8,.8, 0,0,0, 2); //bunny
+			loadObjects(-3,0,7, 1.1,1.1,1.1, 0,90,0, 3); //tirano
 	}
    else
      glDisable(GL_LIGHTING);
@@ -1356,7 +1366,7 @@ int main(int argc,char* argv[])
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    //glClearColor(1,1,1,1);
 	//glColor3f(1.0f, 1.0f, 1.0f);
-	glutInitWindowSize(600,600);
+	glutInitWindowSize(900,900);
    glutCreateWindow("JeeeunKim_MakerBot Simluator");
    //  Set callbacks
    glutDisplayFunc(display);
@@ -1368,10 +1378,13 @@ int main(int argc,char* argv[])
 	texture[0] = LoadTexBMP("wood.bmp");
 	texture[1] = LoadTexBMP("logolong.bmp");
 	texture[2] = LoadTexBMP("logocircle.bmp");
-
+	texture[3] = LoadTexBMP("roomwall.bmp");
+	
 	obj[0] = LoadOBJ("suzanne.obj");
 	obj[1] = LoadOBJ("armadillo.obj");
-	obj[2] = LoadOBJ("bookcase.obj");
+	obj[2] = LoadOBJ("bunny.obj");
+	obj[3] = LoadOBJ("tyra.obj");
+	obj[4] = LoadOBJ("bookcase.obj");
 
 	//  Pass control to GLUT so it can interact with the user
    ErrCheck("init");

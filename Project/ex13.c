@@ -1,4 +1,7 @@
 #include "CSCIx229.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int axes=1;       //  Display axes
 int mode=0;       //  Projection mode
@@ -1123,10 +1126,10 @@ void display()
         glLightfv(GL_LIGHT0,GL_SPECULAR,Specular);
         glLightfv(GL_LIGHT0,GL_POSITION,Position);
 		 
-		  	loadObjects(0,0,5, .7,.7,.7, 0,0,0, 0); //suzanne
-			loadObjects(5,0,7, .8,.8,.8, 0,180,0, 1); //armadillo
-   		loadObjects(10,0,5, .8,.8,.8, 0,0,0, 2); //bunny
-			loadObjects(-3,0,7, 1.1,1.1,1.1, 0,90,0, 3); //tirano
+		//loadObjects(0,0,5, .7,.7,.7, 0,0,0, 0); //suzanne
+		//loadObjects(5,0,7, .8,.8,.8, 0,180,0, 1); //armadillo
+   	//loadObjects(100,0,5, .8,.8,.8, 0,0,0, 2); //bunny
+		//loadObjects(-3,0,7, 1.1,1.1,1.1, 0,90,0, 3); //tirano
 	}
    else
      glDisable(GL_LIGHTING);
@@ -1358,7 +1361,35 @@ void reshape(int width,int height)
  */
 int main(int argc,char* argv[])
 {
-   //  Initialize GLUT
+
+	char line[128]; //each line from the gcode file
+	char *token;
+	char tmp[128]; //temp numbers holder
+	int i = 0;
+   
+	if(argv[1] == NULL)
+		printf("will print a hollow cube");
+	else {
+		FILE *f = fopen(argv[1], "r");
+		if(f != NULL){
+			while(fgets(line, sizeof line, f) != NULL){
+				token = strtok(line, " "); //get each line cmd
+				if(strspn(token, "G1") == 2){ //if cmd starts w/ G1
+					token = strtok(NYLL, " "); //take next token
+					if(strspn(token, "X") == 1){
+
+					}else if (strspn(token, "Z") == 1){
+						for(i=0; i<printIndex; i++)
+							footage[i][1] -= .07;
+					}
+				} else {
+					; //pass other command - do nothing
+				}
+
+			}
+		}
+	}
+	//  Initialize GLUT
    glutInit(&argc,argv);
    setup();
 	

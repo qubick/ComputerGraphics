@@ -4,10 +4,12 @@
 #include <regex.h>
 
 #define maxIndex 100 //default 
-#define baseHeight 5
+
+double footage[maxIndex][3];
+double baseHeight = 5;
+
 
 int main(int argc, char *argv[]){
-	double footage[maxIndex][3];
 	int printIndex = 0;
 	
 	char line[128];
@@ -26,29 +28,32 @@ int main(int argc, char *argv[]){
 				token = strtok(line, " "); //get first command
 				if(strspn(token, "G1") == 2){ //it starts with "G1"
 					token = strtok(NULL, " ");
-						if(strspn(token, "X") == 1){ //moving x
+					//parsing X or Z
+					if(strspn(token, "X") == 1){ //moving x
+						strcpy(tmp, token);
+						for(i=0; i<strlen(tmp); i++)
+							tmp[i] = tmp[i+1]; //take charater "x" off
+						footage[printIndex][0] = atof(tmp);
+//printf("x: %f ",footage[printIndex][0]);
+						token = strtok(NULL, " "); //took y
+						if(strspn(token, "Y") == 1){ //moving y
 							strcpy(tmp, token);
 							for(i=0; i<strlen(tmp); i++)
-								tmp[i] = tmp[i+1];
-							printf("now tmp is: %s\n", tmp);
-							//footage[printIndex][0];
-							//printf("%dth line 1st tok %s\n", printIndex, token);
-					token = strtok(NULL, " "); //took y
-						//footage[printIndex][2];
-						printf("%dth line 2nd tok%s\n", printIndex, token);
-					footage[printIndex][1] = baseHeight;
-#if 0					
-					token = strsep(&line, " ");
-					if(token[0] = "Z")
-						for(i=0; i<printIndex; i++){
-							footage[i][1] -= .07; //moves down		
+								tmp[i] = tmp[i+1]; //take charater "y" off
+							footage[printIndex][2] = atof(tmp); //z-axe in OpenGL
+//printf("y: %f ",footage[printIndex][2]);
 						}
-#endif
-						}
+						footage[printIndex][1] = baseHeight;
+//printf("z: %f\n",footage[printIndex][1]);
 						printIndex++;
-					}
+					} else if(strspn(token, "Z") == 1) //moving z(height)i
+						baseHeight -= 0.7; //only when Z-cmd occur 
 				}
+			}
 			fclose(f);
+			for (i=0; i<printIndex; i++)
+				printf("x:%f, y:%f, z:%f\n", 
+					footage[i][0], footage[i][1], footage[i][2]);
 		}
 	}
 	return 0;

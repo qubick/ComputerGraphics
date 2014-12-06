@@ -1114,10 +1114,10 @@ void display()
         glLightfv(GL_LIGHT0,GL_SPECULAR,Specular);
         glLightfv(GL_LIGHT0,GL_POSITION,Position);
 		 
-		 //for (i=0; i<5; i++)
-		  	loadObjects(0,0,5, .7,.7,.7, 0,0,0, 0); //suzanne
-			loadObjects(5,0,7, .8,.8,.8, 0,180,0, 1); //armadillo
-   }
+		  	//loadObjects(0,0,5, .7,.7,.7, 0,0,0, 0); //suzanne
+			//loadObjects(5,0,7, .8,.8,.8, 0,180,0, 1); //armadillo
+   		loadObjects(0,0,0, 10,10,10, 0,0,0, 2);
+	}
    else
      glDisable(GL_LIGHTING);
 
@@ -1371,6 +1371,7 @@ int main(int argc,char* argv[])
 
 	obj[0] = LoadOBJ("suzanne.obj");
 	obj[1] = LoadOBJ("armadillo.obj");
+	obj[2] = LoadOBJ("bookcase.obj");
 
 	//  Pass control to GLUT so it can interact with the user
    ErrCheck("init");

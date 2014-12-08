@@ -19,6 +19,10 @@ int ball_mode = 0;
 int alpha = 100;
 int tr = 0;	//spool rotation
 
+//for file reading
+int read = 0;
+char *filename;
+
 //material pritning values
 double baseHeight = 4;
 double headerX = 0;
@@ -84,8 +88,58 @@ void sleep(int time){
 	}
 }
 
-void setup(){
+static void readGcode(char* filename){
 
+	char line[128]; //each line from the gcode file
+	char *token;
+	char tmp[128]; //temp numbers holder
+	int i = 0;
+	
+	printf("readGcode() called, filename is '%s'\n", filename);
+	FILE *f = fopen(filename, "r");
+
+	if(f != NULL){
+		printf("opened the file");
+		while(fgets(line, sizeof(line), f) != NULL){
+			token = strtok(line, " "); //get each line cmd
+			
+			if(strspn(token, "G1") == 2){ //if cmd starts w/ G1
+				token = strtok(NULL, " "); //take next token
+				if(strspn(token, "X") == 1){
+					strcpy(tmp, token); //take X position
+					for(i=0; i<strlen(tmp); i++)
+						tmp[i] = tmp[i+1]; //take char "x" off
+					footage[printIndex][0] = atof(tmp);
+
+					token = strtok(NULL, " "); //take Y position
+					if(strspn(token, "Y") == 1){
+						strcpy(tmp, token);
+						for(i=0; i<strlen(tmp); i++)
+							tmp[i] = tmp[i+1]; //take char "Y" off
+						footage[printIndex][2] = atof(tmp); //asign to z in openGL
+						printf("footage[%d][0]:%f, [2]:%f\n", printIndex, footage[printIndex][0], footage[printIndex][2]);
+					}
+					footage[printIndex][2] = baseHeight;
+				}else if (strspn(token, "Z") == 1){
+					for(i=0; i<printIndex; i++)
+						footage[i][1] -= .07;
+					baseHeight -= .07;
+				}
+
+				for(i=0; i<printIndex; i++)
+					printf("x: %f, y: %f, z: %f\n",
+							footage[i][0], footage[i][1], footage[i][2]);
+			} else {
+					printf("pass other commands"); //pass other command - do nothing
+			}
+		}
+		fclose(f);
+	} else {
+		printf("file not available");
+	}
+}
+
+void setup(){
 	//  Enable textures
    glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,mode?GL_REPLACE:GL_MODULATE);
@@ -1168,10 +1222,11 @@ void idle()
    //  Elapsed time in seconds
 	double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
 	// header movement
-	int i = 0;
+	//int i = 0;
 
 	zh = fmod(90*t,360.0);
 
+#if 0
 	if(sin(period)>=0 && cos(period)>=0){
 		footW = sin(period);
 			if (printIndex<FOOTAGE){
@@ -1220,6 +1275,7 @@ void idle()
 		if (baseHeight>0)
 			baseHeight -= .08;
 	}
+	#endif
 	headerX = footage[printIndex-1][0];
 	headerY = footage[printIndex-1][2];
 
@@ -1359,44 +1415,27 @@ void reshape(int width,int height)
 /*
  *  Start up GLUT and tell it what to do
  */
-int main(int argc,char* argv[])
+int main(int argc, char* argv[])
 {
 
-	char line[128]; //each line from the gcode file
-	char *token;
-	char tmp[128]; //temp numbers holder
-	int i = 0;
+	//char line[128]; //each line from the gcode file
+	//char *token;
+	//char tmp[128]; //temp numbers holder
+	//int i = 0;
    
-	if(argv[1] == NULL)
+	if(argv[1] == NULL) //read gcode
 		printf("will print a hollow cube");
 	else {
-		FILE *f = fopen(argv[1], "r");
-		if(f != NULL){
-			while(fgets(line, sizeof line, f) != NULL){
-				token = strtok(line, " "); //get each line cmd
-				if(strspn(token, "G1") == 2){ //if cmd starts w/ G1
-					token = strtok(NYLL, " "); //take next token
-					if(strspn(token, "X") == 1){
-
-					}else if (strspn(token, "Z") == 1){
-						for(i=0; i<printIndex; i++)
-							footage[i][1] -= .07;
-					}
-				} else {
-					; //pass other command - do nothing
-				}
-
-			}
-		}
+		//filename = argv[1]; //nothing
+		printf("filename from main is: %s\n", argv[1]);
 	}
+		readGcode(argv[1]);
 	//  Initialize GLUT
    glutInit(&argc,argv);
    setup();
 	
 	//  Request double buffered, true color window
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-   //glClearColor(1,1,1,1);
-	//glColor3f(1.0f, 1.0f, 1.0f);
 	glutInitWindowSize(900,900);
    glutCreateWindow("JeeeunKim_MakerBot Simluator");
    //  Set callbacks
@@ -1406,16 +1445,18 @@ int main(int argc,char* argv[])
    glutKeyboardFunc(key);
    glutIdleFunc(idle);
    
+
 	texture[0] = LoadTexBMP("wood.bmp");
 	texture[1] = LoadTexBMP("logolong.bmp");
 	texture[2] = LoadTexBMP("logocircle.bmp");
 	texture[3] = LoadTexBMP("roomwall.bmp");
-	
+	#if 0
 	obj[0] = LoadOBJ("suzanne.obj");
 	obj[1] = LoadOBJ("armadillo.obj");
 	obj[2] = LoadOBJ("bunny.obj");
 	obj[3] = LoadOBJ("tyra.obj");
 	obj[4] = LoadOBJ("bookcase.obj");
+#endif
 
 	//  Pass control to GLUT so it can interact with the user
    ErrCheck("init");

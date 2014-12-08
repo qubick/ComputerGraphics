@@ -110,16 +110,16 @@ static void readGcode(char* filename){
 					strcpy(tmp, token); //take X position
 					for(i=0; i<strlen(tmp); i++)
 						tmp[i] = tmp[i+1]; //take char "x" off
-					footage[printIndex][0] = atof(tmp);
+					footage[printIndex][0] = atof(tmp)/100; //calibration
 
 					token = strtok(NULL, " "); //take Y position
 					if(strspn(token, "Y") == 1){
 						strcpy(tmp, token);
 						for(i=0; i<strlen(tmp); i++)
 							tmp[i] = tmp[i+1]; //take char "Y" off
-						footage[printIndex][2] = atof(tmp); //asign to z in openGL
+						footage[printIndex][2] = atof(tmp)/100; //asign to z in openGL
 					}
-					footage[printIndex++][1] = baseHeight; //y-axe in OpenGL
+					footage[printIndex++][1] = baseHeight+1; //y-axe in OpenGL
 				} else if (strspn(token, "Z") == 1){
 					for(i=0; i<printIndex; i++)
 						footage[i][1] -= .07;
@@ -1209,8 +1209,8 @@ void display()
 		cylinder(1,5.2,headerY-.7,	.1,4,.1,	90,0,90);
 		headerBar(1,5,headerY, .2,.2,.2, 0);
 
-	for (i=0; i<FOOTAGE; i++){
-		droplet(footage[i][0], footage[i][1], footage[i][2], 0.05);
+	for (i=0; i<displIndex; i++){
+		droplet(footage[i][0], footage[i][1], footage[i][2], .05);
 	}
 	ErrCheck("display");
    glFlush();
@@ -1280,8 +1280,8 @@ void idle()
 			baseHeight -= .08;
 	}
 	#endif
-	headerX = footage[displIndex][0]/100;
-	headerY = footage[displIndex][2]/100;
+	headerX = footage[displIndex][0];
+	headerY = footage[displIndex][2];
 printf("headerX: %f, headerY: %f\n", headerX, headerY);
 	glutPostRedisplay();
 }

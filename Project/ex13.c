@@ -48,7 +48,7 @@ double footD = 4;
 double period = 0;
 
 //define spool colors
-int 	 cId = 0;
+int 	 cId = 2;
 double color[8][3];
 #define WHITE	0
 #define RED		1
@@ -121,7 +121,6 @@ static void readGcode(char* filename){
 					}
 					footage[printIndex++][1] = baseHeight+1; //y-axe in OpenGL
 				} else if (strspn(token, "Z") == 1){
-printf("taken Z command\n");
 #if 0
 					strcpy(tmp, token);
 					for(i=0; i<strlen(tmp); i++)

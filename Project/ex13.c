@@ -40,6 +40,7 @@ double rep=10; //repetition
 double footage[FOOTAGE][3];
 double footheight = 0;
 int printIndex = 0;
+int displIndex = 0;
 
 double footW = 0;
 double footH = 0;
@@ -90,7 +91,7 @@ void sleep(int time){
 
 static void readGcode(char* filename){
 
-	char line[128]; //each line from the gcode file
+	char line[500]; //each line from the gcode file
 	char *token;
 	char tmp[128]; //temp numbers holder
 	int i = 0;
@@ -123,17 +124,19 @@ static void readGcode(char* filename){
 					for(i=0; i<printIndex; i++)
 						footage[i][1] -= .07;
 					baseHeight -= .07;
+				} else {
+					; //pass other commands
 				}
-#if 0 //debugg print
-				for(i=0; i<printIndex; i++)
-					printf("x: %f, y: %f, z: %f\n",
-							footage[i][0], footage[i][1], footage[i][2]);
-#endif
 			} else {
-					printf("pass other commands\n"); //pass other command - do nothing
+				;
+				//printf("pass other commands\n"); //pass other command - do nothing
 			}
+
 		}
 		fclose(f);
+		for(i=0; i<printIndex; i++)
+			printf("x[%d]: %f, y[%d]: %f, z[%d]: %f\n",
+				i,footage[i][0], i,footage[i][1], i,footage[i][2]);
 	} else {
 		printf("file not available");
 	}
@@ -1199,13 +1202,13 @@ void display()
 	
 	//plate - up&down
 	plate(-1,baseHeight,-2.5,.2,.2,.2, 0);	
-
+	
 	//header - left&right or back&forth
 	header(headerX,5,headerY, .2,.2,.2, 0);
 		cylinder(1,5.2,headerY-.1,		.1,4,.1,	90,0,90);// , ,z
 		cylinder(1,5.2,headerY-.7,	.1,4,.1,	90,0,90);
 		headerBar(1,5,headerY, .2,.2,.2, 0);
-	
+
 	for (i=0; i<FOOTAGE; i++){
 		droplet(footage[i][0], footage[i][1], footage[i][2], 0.05);
 	}
@@ -1225,6 +1228,7 @@ void idle()
 	//int i = 0;
 
 	zh = fmod(90*t,360.0);
+	displIndex++;
 
 #if 0
 	if(sin(period)>=0 && cos(period)>=0){
@@ -1276,9 +1280,9 @@ void idle()
 			baseHeight -= .08;
 	}
 	#endif
-	headerX = footage[printIndex-1][0];
-	headerY = footage[printIndex-1][2];
-
+	headerX = footage[displIndex][0]/100;
+	headerY = footage[displIndex][2]/100;
+printf("headerX: %f, headerY: %f\n", headerX, headerY);
 	glutPostRedisplay();
 }
 

@@ -1430,11 +1430,6 @@ void reshape(int width,int height)
 int main(int argc, char* argv[])
 {
 
-	//char line[128]; //each line from the gcode file
-	//char *token;
-	//char tmp[128]; //temp numbers holder
-	//int i = 0;
-   
 	if(argv[1] == NULL) { //read gcode
 		//printf("will print a hollow cube");
 		printf("usage: ./makerbot [gcodefile, i.e. cube.gcode]\n\n");
@@ -1464,7 +1459,8 @@ int main(int argc, char* argv[])
 	texture[1] = LoadTexBMP("logolong.bmp");
 	texture[2] = LoadTexBMP("logocircle.bmp");
 	texture[3] = LoadTexBMP("roomwall.bmp");
-	#if 0
+
+#if 0
 	obj[0] = LoadOBJ("suzanne.obj");
 	obj[1] = LoadOBJ("armadillo.obj");
 	obj[2] = LoadOBJ("bunny.obj");
@@ -1475,5 +1471,6 @@ int main(int argc, char* argv[])
 	//  Pass control to GLUT so it can interact with the user
    ErrCheck("init");
    glutMainLoop();
-   return 0;
+
+	return 0;
 }

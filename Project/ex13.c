@@ -130,7 +130,7 @@ static void readGcode(char* filename){
 							footage[i][0], footage[i][1], footage[i][2]);
 #endif
 			} else {
-					printf("pass other commands"); //pass other command - do nothing
+					printf("pass other commands\n"); //pass other command - do nothing
 			}
 		}
 		fclose(f);

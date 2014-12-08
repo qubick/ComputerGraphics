@@ -110,33 +110,41 @@ static void readGcode(char* filename){
 					strcpy(tmp, token); //take X position
 					for(i=0; i<strlen(tmp); i++)
 						tmp[i] = tmp[i+1]; //take char "x" off
-					footage[printIndex][0] = atof(tmp)/100; //calibration
+					footage[printIndex][0] = atof(tmp)/50-1; //calibration
 
 					token = strtok(NULL, " "); //take Y position
 					if(strspn(token, "Y") == 1){
 						strcpy(tmp, token);
 						for(i=0; i<strlen(tmp); i++)
 							tmp[i] = tmp[i+1]; //take char "Y" off
-						footage[printIndex][2] = atof(tmp)/100; //asign to z in openGL
+						footage[printIndex][2] = atof(tmp)/50-1; //asign to z in openGL
 					}
 					footage[printIndex++][1] = baseHeight+1; //y-axe in OpenGL
 				} else if (strspn(token, "Z") == 1){
+printf("taken Z command\n");
+#if 0
+					strcpy(tmp, token);
+					for(i=0; i<strlen(tmp); i++)
+						tmp[i] = tmp[i+1]; //take char "Z" off
+					footage[printIndex][1] = atof(tmp)/50; //asign to z in openGLi
+#endif
 					for(i=0; i<printIndex; i++)
-						footage[i][1] -= .07;
-					baseHeight -= .07;
+						footage[i][1] -= 0.1;
+					
 				} else {
 					; //pass other commands
 				}
 			} else {
-				;
-				//printf("pass other commands\n"); //pass other command - do nothing
+				; //pass other commands
 			}
 
 		}
 		fclose(f);
+#if 0
 		for(i=0; i<printIndex; i++)
 			printf("x[%d]: %f, y[%d]: %f, z[%d]: %f\n",
 				i,footage[i][0], i,footage[i][1], i,footage[i][2]);
+#endif
 	} else {
 		printf("file not available");
 	}
@@ -1282,7 +1290,7 @@ void idle()
 	#endif
 	headerX = footage[displIndex][0];
 	headerY = footage[displIndex][2];
-printf("headerX: %f, headerY: %f\n", headerX, headerY);
+//printf("headerX: %f, headerY: %f, baseHeight:%f \n", headerX, headerY, baseHeight);
 	glutPostRedisplay();
 }
 

@@ -204,7 +204,7 @@ void setup(){
 	color[BLACK][2] = 0.0;
 }
 
-
+#if 0
 static void loadObjects(double x, double y, double z,
 						double dx, double dy, double dz,
 						double rx, double ry, double rz,
@@ -222,6 +222,7 @@ static void loadObjects(double x, double y, double z,
 
 	glPopMatrix();
 }
+#endif
 
 static void cylinder(double x, double y, double z,
 						double dx, double dy, double dz,
@@ -1434,9 +1435,11 @@ int main(int argc, char* argv[])
 	//char tmp[128]; //temp numbers holder
 	//int i = 0;
    
-	if(argv[1] == NULL) //read gcode
-		printf("will print a hollow cube");
-	else {
+	if(argv[1] == NULL) { //read gcode
+		//printf("will print a hollow cube");
+		printf("usage: ./makerbot [gcodefile, i.e. cube.gcode]\n\n");
+		return 0;
+	} else {
 		//filename = argv[1]; //nothing
 		printf("filename from main is: %s\n", argv[1]);
 	}

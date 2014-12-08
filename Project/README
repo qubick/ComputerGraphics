@@ -1,11 +1,33 @@
-Homework5: Lighting
-
 Jeeeun Kim
 CSCI 5229 Fall 2014
 
-Demonstrates basic lighting upon object (street, truck, and taxi).
+Final Project: MakerBot Simulator
+
+usage: ./makerbot [gcode file]
+i.e.) ./makerbot cube.gcode
+
+This simulator reads Gcode, which is CNC code read by 3D printers, by slicing .obj file or STL file, and extrude materials onto the printing base.
+
+I downloaded random STL files from Thingviese(www.thingiverse.com)and exported into .gcode format, using Sli3r, as 3D printer software does. (i.e. MakerBot's MakerWare, DimensionSST's Catalyst)
+
+If you take any gcode as parameter to execute the simulator, it will read file and retrieve all X-,Y-,and Z-positions to let printing header and rotating bar move. (It will print the extra contuoring outline, name called rafts, since this is default Sli3r setting)
+
+Or, you are able to get any gcode, you will be able to run the simulator with that file. I suggest you to take around 1000lines of that code, not to make segmentaation fault.
+
+
+For instances, I included several gcode which has only 1/3parts of the entire code, otherwise it takes too long to read file, or cause segmentation fault because of out of memory.
+
+You will see how it works by watching the video:
+http://vimeo.com/113939681
+
+samle gcode list	cube.gcode
+						lowpoly-gingerbread.gcode
+						clover.gcode
+						guitar.gcode
+
 
 Key bindings
+  c/C			Changing Filamet Color
   l          Toggles lighting
   a/A        Decrease/increase ambient light
   b/B	     Toggle light source rotation axe - horizontal/vertical

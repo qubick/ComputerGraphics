@@ -99,7 +99,7 @@ static void readGcode(char* filename){
 	FILE *f = fopen(filename, "r");
 
 	if(f != NULL){
-		printf("opened the file");
+		printf("opened the file\n");
 		while(fgets(line, sizeof(line), f) != NULL){
 			token = strtok(line, " "); //get each line cmd
 			
@@ -117,18 +117,18 @@ static void readGcode(char* filename){
 						for(i=0; i<strlen(tmp); i++)
 							tmp[i] = tmp[i+1]; //take char "Y" off
 						footage[printIndex][2] = atof(tmp); //asign to z in openGL
-						printf("footage[%d][0]:%f, [2]:%f\n", printIndex, footage[printIndex][0], footage[printIndex][2]);
 					}
-					footage[printIndex][2] = baseHeight;
-				}else if (strspn(token, "Z") == 1){
+					footage[printIndex++][1] = baseHeight; //y-axe in OpenGL
+				} else if (strspn(token, "Z") == 1){
 					for(i=0; i<printIndex; i++)
 						footage[i][1] -= .07;
 					baseHeight -= .07;
 				}
-
+#if 0 //debugg print
 				for(i=0; i<printIndex; i++)
 					printf("x: %f, y: %f, z: %f\n",
 							footage[i][0], footage[i][1], footage[i][2]);
+#endif
 			} else {
 					printf("pass other commands"); //pass other command - do nothing
 			}
